@@ -23,6 +23,8 @@ export class DiagnosticoProyectoComponent implements OnInit {
     'Estados Unidos', 'Canadá', 'México'
   ];
   form!: FormGroup;
+  showModal = false;
+  selectedFloor: string | null = null;
 
   constructor(private fb: FormBuilder) { }
 
@@ -30,6 +32,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.pattern('^[A-Za-z]+$')]],
       projectType: ['', Validators.required],
+      area: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9 ]+$')]],
       floor: ['', Validators.required],
       country: ['', Validators.required],
       address: ['']
@@ -53,6 +56,10 @@ export class DiagnosticoProyectoComponent implements OnInit {
     return this.form.get('projectType');
   }
 
+  get area(){
+    return this.form.get('area');
+  }
+
   get floor() {
     return this.form.get('floor');
   }
@@ -71,15 +78,17 @@ export class DiagnosticoProyectoComponent implements OnInit {
       this.name.markAsTouched();
     } else if (this.currentQuestion === 2 && this.projectType?.invalid) {
       this.projectType.markAsTouched();
-    } else if (this.currentQuestion === 3 && this.floor?.invalid) {
+    } else if(this.currentQuestion === 3 && this.area?.invalid){
+      this.area.markAllAsTouched();
+    } else if (this.currentQuestion === 4 && this.floor?.invalid) {
       this.floor.markAsTouched();
-    } else if (this.currentQuestion === 4 && this.country?.invalid) {
+    } else if (this.currentQuestion === 5 && this.country?.invalid) {
       this.country.markAsTouched();
-    } else if (this.currentQuestion === 5 && this.country?.value === 'Perú' && this.address?.invalid) {
+    } else if (this.currentQuestion === 6 && this.country?.value === 'Perú' && this.address?.invalid) {
       this.address.markAsTouched();
     } else {
       console.log("Formulario enviado");
-      if (this.currentQuestion < 5) {
+      if (this.currentQuestion < 6) {
         this.currentQuestion++;
         this.progressBarWidth = `${this.currentQuestion * 20}%`;
         console.log("Pregunta actual:", this.currentQuestion);
@@ -99,5 +108,22 @@ export class DiagnosticoProyectoComponent implements OnInit {
     this.form.reset();
     this.form.markAsUntouched();
     this.form.markAsPristine();
+  }
+
+  onBack() {
+    if (this.currentQuestion > 1) {
+      this.currentQuestion--;
+      this.progressBarWidth = `${this.currentQuestion * 20}%`;
+      console.log("Pregunta actual:", this.currentQuestion);
+    }
+  }
+
+  onFloorChange() {
+    this.selectedFloor = this.form.get('floor')!.value;
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
   }
 }
