@@ -1,136 +1,193 @@
 <div class="min-h-screen bg-gradient-construction">
   <div class="text-center py-8">
     <h1 class="text-4xl font-bold text-gray-700 mb-2">DIAGNÓSTICO DEL PROYECTO</h1>
-    <div class="my-16">
-      <p class="text-gray-600 mb-2">A través de este formulario lograremos asesorarte mejor:</p>
-      <div class="w-1/3 mx-auto h-1 bg-gray-300 rounded-full overflow-hidden">
-        <div class="h-full bg-lime-green" [style.width]="progressBarWidth"></div>
+    <div class="my-8">
+      <p *ngIf="currentStep === 1" class="text-gray-600 mb-2">A TRAVÉS DE ESTE FORMULARIO LOGRAREMOS ASESORARTE MEJOR</p>
+      <p *ngIf="currentStep === 2" class="text-gray-600 mb-2">AHORA SÍ! INICIEMOS CON EL DIAGNÓSTICO</p>
+      <div class="w-3/4 mx-auto text-center">
+        <p class="text-gray-700 font-bold mb-2">INFORMACIÓN GENERAL</p>
+        <div class="flex items-center justify-between mb-2">
+          <span>1</span>
+          <span>2</span>
+          <span>3</span>
+          <span>4</span>
+        </div>
+        <div class="w-full h-2 bg-gray-300 rounded-full overflow-hidden">
+          <div class="h-full bg-lime-green" [style.width]="progressBarWidth"></div>
+        </div>
       </div>
     </div>
   </div>
   <div class="flex items-center justify-center min-h-screen -mt-72">
     <div class="relative z-10 p-10 bg-white shadow-lg rounded-3xl border border-gray-300 max-w-3xl w-full">
       <form [formGroup]="form" (ngSubmit)="onContinue()">
-        <!-- Question 1: Name -->
-        <ng-container *ngIf="currentQuestion === 1">
-          <div class="mb-4">
-            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">
-              1 → Nombre Cliente
-            </label>
-            <input id="name" formControlName="name" name="name" type="text" placeholder="Your name" autocomplete="name"
-                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="text-red-500 text-sm mt-2">
-              <div *ngIf="name?.errors?.['required']">
-                Nombre Cliente es requerido.
-              </div>
-              <div *ngIf="name?.errors?.['pattern']">
-                Solo permite letras A-Z.
-              </div>
-            </div>
-          </div>
-        </ng-container>
-        
-        <!-- Question 2: Project Type -->
-        <ng-container *ngIf="currentQuestion === 2">
-          <div class="mb-4">
-            <label for="projectType" class="block text-gray-700 text-sm font-bold mb-2">
-              2 → Seleccione un tipo de proyecto
-            </label>
-            <div>
-              <div *ngFor="let proyecto of proyectos">
-                <input type="radio" id="{{proyecto}}" formControlName="projectType" [value]="proyecto" class="mr-2 leading-tight">
-                <label for="{{proyecto}}" class="text-gray-700">{{ proyecto }}</label>
-              </div>
-              <div *ngIf="projectType?.invalid && (projectType?.dirty || projectType?.touched)" class="text-red-500 text-sm mt-2">
-                <div *ngIf="projectType?.errors?.['required']">
-                  Debes seleccionar un tipo de proyecto.
+        <ng-container *ngIf="currentStep === 1">
+          <!-- Question 1: Name -->
+          <ng-container *ngIf="currentQuestion === 1">
+            <div class="mb-4">
+              <label for="name" class="block text-gray-700 text-sm font-bold mb-2">
+                1 → NOMBRE CLIENTE
+              </label>
+              <input id="name" formControlName="name" name="name" type="text" placeholder="Your name" autocomplete="name"
+                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="text-red-500 text-sm mt-2">
+                <div *ngIf="name?.errors?.['required']">
+                  Nombre Cliente es requerido.
+                </div>
+                <div *ngIf="name?.errors?.['pattern']">
+                  Solo permite letras A-Z.
                 </div>
               </div>
             </div>
-          </div>
-        </ng-container>
-
-        <!-- Question 3: Area -->
-        <ng-container *ngIf="currentQuestion === 3">
-          <div class="mb-4">
-            <label for="area" class="block text-gray-700 text-sm font-bold mb-2">
-              3 → Área
-            </label>
-            <input id="area" formControlName="area" name="area" type="text" placeholder="Your area" autocomplete="area"
-                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            <div *ngIf="area?.invalid && (area?.dirty || area?.touched)" class="text-red-500 text-sm mt-2">
-              <div *ngIf="area?.errors?.['required']">
-                Debes ingresar área.
-              </div>
-              <div *ngIf="area?.errors?.['pattern']">
-                Solo permite letras y números.
-              </div>
-            </div>
-          </div>
-        </ng-container>
-
-        <!-- Question 4: Floor -->
-        <ng-container *ngIf="currentQuestion === 4">
-          <div class="mb-4">
-            <label for="floor" class="block text-gray-700 text-sm font-bold mb-2">
-              4 → Piso
-            </label>
-            <div>
-              <div *ngFor="let piso of pisos">
-                <input type="radio" id="{{piso}}" formControlName="floor" [value]="piso" (change)="onFloorChange()" class="mr-2 leading-tight">
-                <label for="{{piso}}" class="text-gray-700">{{ piso }}</label>
-              </div>
-              <div *ngIf="floor?.invalid && (floor?.dirty || floor?.touched)" class="text-red-500 text-sm mt-2">
-                <div *ngIf="floor?.errors?.['required']">
-                  Debes seleccionar Piso.
+          </ng-container>
+          
+          <!-- Question 2: Project Type -->
+          <ng-container *ngIf="currentQuestion === 2">
+            <div class="mb-4">
+              <label for="projectType" class="block text-gray-700 text-sm font-bold mb-2">
+                2 → TIPO DE PROYECTO
+              </label>
+              <div>
+                <div *ngFor="let proyecto of proyectos">
+                  <input type="radio" id="{{proyecto}}" formControlName="projectType" [value]="proyecto" class="mr-2 leading-tight" (change)="onProjectTypeChange()">
+                  <label for="{{proyecto}}" class="text-gray-700">{{ proyecto }}</label>
+                </div>
+                <div *ngIf="projectType?.invalid && (projectType?.dirty || projectType?.touched)" class="text-red-500 text-sm mt-2">
+                  <div *ngIf="projectType?.errors?.['required']">
+                    Debes seleccionar un tipo de proyecto.
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </ng-container>
+          </ng-container>
 
-        <!-- Question 5: Country -->
-        <ng-container *ngIf="currentQuestion === 5">
-          <div class="mb-4">
-            <label for="country" class="block text-gray-700 text-sm font-bold mb-2">
-              5 → País
-            </label>
-            <div class="relative">
-              <select id="country" formControlName="country" name="country" autocomplete="off" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
-                <option value="">Seleccione un país</option>
-                <option *ngFor="let pais of paises" [value]="pais">{{ pais }}</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path d="M7 10l5 5 5-5H7z" />
-                </svg>
-              </div>
-              <div *ngIf="country?.invalid && (country?.dirty || country?.touched)" class="text-red-500 text-sm mt-2">
-                <div *ngIf="country?.errors?.['required']">
-                  Debes seleccionar un País.
+          <!-- Question 3: Area -->
+          <ng-container *ngIf="currentQuestion === 3">
+            <div class="mb-4">
+              <label for="area" class="block text-gray-700 text-sm font-bold mb-2">
+                3 → ÁREA
+              </label>
+              <input id="area" formControlName="area" name="area" type="text" placeholder="Your area" autocomplete="area"
+                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <div *ngIf="area?.invalid && (area?.dirty || area?.touched)" class="text-red-500 text-sm mt-2">
+                <div *ngIf="area?.errors?.['required']">
+                  Debes ingresar área.
+                </div>
+                <div *ngIf="area?.errors?.['pattern']">
+                  Solo permite letras y números.
                 </div>
               </div>
             </div>
-          </div>
-        </ng-container>
+          </ng-container>
 
-        <!-- Question 6: Address (only if country is Peru) -->
-        <ng-container *ngIf="currentQuestion === 6">
-          <div *ngIf="country?.value === 'Perú'" class="mb-4">
-            <label for="address" class="block text-gray-700 text-sm font-bold mb-2">
-              6 → Dirección
-            </label>
-            <input id="address" formControlName="address" name="address" type="text" placeholder="Your address" autocomplete="address"
-                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            <div *ngIf="address?.invalid && (address?.dirty || address?.touched)" class="text-red-500 text-sm mt-2">
-              <div *ngIf="address?.errors?.['required']">
-                Dirección es requerido.
-              </div>
-              <div *ngIf="address?.errors?.['pattern']">
-                Solo permite letras A-Z.
+          <!-- Question 4: Floor -->
+          <ng-container *ngIf="currentQuestion === 4">
+            <div class="mb-4">
+              <label for="floor" class="block text-gray-700 text-sm font-bold mb-2">
+                4 → PISOS
+              </label>
+              <div>
+                <div *ngFor="let piso of filteredPisos">
+                  <input type="radio" id="{{piso}}" formControlName="floor" [value]="piso" class="mr-2 leading-tight">
+                  <label for="{{piso}}" class="text-gray-700">{{ piso }}</label>
+                </div>
+                <div *ngIf="floor?.invalid && (floor?.dirty || floor?.touched)" class="text-red-500 text-sm mt-2">
+                  <div *ngIf="floor?.errors?.['required']">
+                    Debes seleccionar Piso.
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </ng-container>
+
+          <!-- Question 5: Country -->
+          <ng-container *ngIf="currentQuestion === 5">
+            <div class="mb-4">
+              <label for="country" class="block text-gray-700 text-sm font-bold mb-2">
+                5 → PAÍS
+              </label>
+              <div class="relative">
+                <select id="country" formControlName="country" name="country" autocomplete="off" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                  <option value="">Seleccione un país</option>
+                  <option *ngFor="let pais of paises" [value]="pais">{{ pais }}</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                  <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M7 10l5 5 5-5H7z" />
+                  </svg>
+                </div>
+                <div *ngIf="country?.invalid && (country?.dirty || country?.touched)" class="text-red-500 text-sm mt-2">
+                  <div *ngIf="country?.errors?.['required']">
+                    Debes seleccionar un País.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="currentStep === 2">
+          <!-- Second Step Questions -->
+          <!-- Question 1: Primer Nivel -->
+          <ng-container *ngIf="currentQuestion === 1">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2">
+                1 → PRIMER NIVEL (PUEDE ELEGIR UNA O MÁS OPCIONES)
+              </label>
+              <div>
+                <div *ngFor="let nivel of primerNivel">
+                  <input type="checkbox" id="{{nivel}}" formControlName="primerNivel" [value]="nivel" class="mr-2 leading-tight">
+                  <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Question 2: Segundo Nivel -->
+          <ng-container *ngIf="currentQuestion === 2">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2">
+                2 → SEGUNDO NIVEL (PUEDE ELEGIR UNA O MÁS OPCIONES)
+              </label>
+              <div>
+                <div *ngFor="let nivel of segundoNivel">
+                  <input type="checkbox" id="{{nivel}}" formControlName="segundoNivel" [value]="nivel" class="mr-2 leading-tight">
+                  <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
+                </div>
+                <input type="text" formControlName="otros" placeholder="Otros" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2">
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Question 3: Segundo Nivel + Terraza -->
+          <ng-container *ngIf="currentQuestion === 3">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2">
+                3 → SEGUNDO NIVEL + TERRAZA (PUEDE ELEGIR UNA O MÁS OPCIONES)
+              </label>
+              <div>
+                <div *ngFor="let nivel of segundoNivelMasTerraza">
+                  <input type="checkbox" id="{{nivel}}" formControlName="segundoNivelMasTerraza" [value]="nivel" class="mr-2 leading-tight">
+                  <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Question 4: Estilo de Fachada -->
+          <ng-container *ngIf="currentQuestion === 4">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2">
+                4 → ESTILO DE FACHADA
+              </label>
+              <div>
+                <div *ngFor="let estilo of estilosFachada">
+                  <input type="radio" id="{{estilo}}" formControlName="estiloFachada" [value]="estilo" class="mr-2 leading-tight">
+                  <label for="{{estilo}}" class="text-gray-700">{{ estilo }}</label>
+                </div>
+              </div>
+            </div>
+          </ng-container>
         </ng-container>
 
         <!-- Buttons -->
@@ -138,47 +195,16 @@
           <button *ngIf="currentQuestion > 1 && currentQuestion < 6" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" type="button" (click)="onBack()">
             REGRESAR
           </button>
-          <button *ngIf="currentQuestion < 6" class="bg-lime-green hover:bg-lime-green-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" type="submit">
+          <button class="bg-lime-green hover:bg-lime-green-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" type="submit">
             CONTINUAR
-          </button>
-          <button *ngIf="currentQuestion === 6" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" type="button" (click)="onCancel()">
-            CANCELAR
-          </button>
-          <button *ngIf="currentQuestion === 6" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" type="button" (click)="onSave()">
-            GUARDAR
           </button>
         </div>
       </form>
     </div>
   </div>
-</div>
-
-<!-- Modal -->
-<div *ngIf="showModal" class="fixed z-50 inset-0 overflow-y-auto">
-  <div class="flex items-center justify-center min-h-screen px-4">
-    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-      <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-    </div>
-    <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
-      <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-        <div class="sm:flex sm:items-start">
-          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-              Información Adicional
-            </h3>
-            <div class="mt-2">
-              <p class="text-sm text-gray-500">
-                Seleccionaste {{ selectedFloor }}. Aquí hay información adicional relevante para esta opción.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" (click)="closeModal()">
-          Cerrar
-        </button>
-      </div>
+  <div *ngIf="showMessage" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white p-6 rounded shadow-lg text-center">
+      <p class="text-lg font-bold text-gray-700">{{ message }}</p>
     </div>
   </div>
 </div>

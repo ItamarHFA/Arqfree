@@ -8,23 +8,31 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./diagnostico-proyecto.component.css']
 })
 export class DiagnosticoProyectoComponent implements OnInit {
+  currentStep = 1;
   currentQuestion = 1;
   progressBarWidth: string = '20%';
   proyectos = ['Unifamiliar', 'Multifamiliar', 'Comercial'];
-  pisos = ['1 NIVEL', '2 NIVELES', '2 NIVELES + TERRAZA'];
+  pisos: { [key: string]: string[] } = {
+    Unifamiliar: ['1 nivel', '2 niveles + terraza', 'Otros'],
+    Multifamiliar: ['1 nivel', '2 niveles + terraza', '3 a más'],
+    Comercial: ['1 nivel', '2 niveles + terraza', '3 niveles a más']
+  };
+  filteredPisos: string[] = [];
   paises = [
-    // Sudamérica
     'Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 'Ecuador', 'Guyana', 'Paraguay', 'Perú', 'Surinam', 'Uruguay', 'Venezuela',
-    // Europa
     'Alemania', 'España', 'Francia', 'Italia', 'Reino Unido', 'Portugal', 'Rusia', 'Países Bajos', 'Bélgica', 'Suiza',
-    // África
     'Nigeria', 'Sudáfrica', 'Egipto', 'Argelia', 'Etiopía', 'Ghana', 'Kenia', 'Uganda', 'Angola', 'Mozambique',
-    // Norteamérica
     'Estados Unidos', 'Canadá', 'México'
   ];
+  primerNivel = ['COMEDOR', 'BAÑO DE VISITA', 'ESTACIONAMIENTO', 'ESTUDIO', 'SALA', 'COCINA', 'DORMITORIO', 'TERRAZA'];
+  segundoNivel = ['DORMITORIO PRINCIPAL', 'DORMITORIO SECUNDARIO', 'ZONA DE STAR'];
+  segundoNivelMasTerraza = ['ZONA DE SERVICIO', 'ZONA SOCIAL'];
+  estilosFachada = ['INTROSPECTIVA', 'MODERNA', 'POSMODERNA'];
   form!: FormGroup;
   showModal = false;
   selectedFloor: string | null = null;
+  showMessage = false;
+  message = '';
 
   constructor(private fb: FormBuilder) { }
 
@@ -35,7 +43,12 @@ export class DiagnosticoProyectoComponent implements OnInit {
       area: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9 ]+$')]],
       floor: ['', Validators.required],
       country: ['', Validators.required],
-      address: ['']
+      address: [''],
+      primerNivel: [[]],
+      segundoNivel: [[]],
+      segundoNivelMasTerraza: [[]],
+      otros: [''],
+      estiloFachada: ['', Validators.required]
     });
 
     this.form.get('country')!.valueChanges.subscribe(value => {
@@ -56,7 +69,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
     return this.form.get('projectType');
   }
 
-  get area(){
+  get area() {
     return this.form.get('area');
   }
 
@@ -72,42 +85,68 @@ export class DiagnosticoProyectoComponent implements OnInit {
     return this.form.get('address');
   }
 
+  onProjectTypeChange() {
+    const selectedProjectType = this.form.get('projectType')!.value;
+    this.filteredPisos = this.pisos[selectedProjectType];
+  }
+
   onContinue() {
     console.log('Formulario actual:', this.form.value);
-    if (this.currentQuestion === 1 && this.name?.invalid) {
-      this.name.markAsTouched();
-    } else if (this.currentQuestion === 2 && this.projectType?.invalid) {
-      this.projectType.markAsTouched();
-    } else if(this.currentQuestion === 3 && this.area?.invalid){
-      this.area.markAllAsTouched();
-    } else if (this.currentQuestion === 4 && this.floor?.invalid) {
-      this.floor.markAsTouched();
-    } else if (this.currentQuestion === 5 && this.country?.invalid) {
-      this.country.markAsTouched();
-    } else if (this.currentQuestion === 6 && this.country?.value === 'Perú' && this.address?.invalid) {
-      this.address.markAsTouched();
-    } else {
-      console.log("Formulario enviado");
-      if (this.currentQuestion < 6) {
-        this.currentQuestion++;
-        this.progressBarWidth = `${this.currentQuestion * 20}%`;
-        console.log("Pregunta actual:", this.currentQuestion);
+    if (this.currentStep === 1) {
+      if (this.currentQuestion === 1 && this.name?.invalid) {
+        this.name.markAsTouched();
+      } else if (this.currentQuestion === 2 && this.projectType?.invalid) {
+        this.projectType.markAsTouched();
+      } else if (this.currentQuestion === 3 && this.area?.invalid) {
+        this.area.markAllAsTouched();
+      } else if (this.currentQuestion === 4 && this.floor?.invalid) {
+        this.floor.markAsTouched();
+      } else if (this.currentQuestion === 5 && this.country?.invalid) {
+        this.country.markAsTouched();
+      } else {
+        console.log("Formulario enviado");
+        if (this.currentQuestion < 5) {
+          this.currentQuestion++;
+          this.progressBarWidth = `${this.currentQuestion * 20}%`;
+          console.log("Pregunta actual:", this.currentQuestion);
+        } else if (this.currentQuestion === 5) {
+          this.showMessage = true;
+          this.message = '¡GENIAL! HAZ CULMINADO EL PASO 1\nCONTINUEMOS CON EL PASO 2';
+          setTimeout(() => {
+            this.showMessage = false;
+            this.currentStep = 2;
+            this.currentQuestion = 1;
+            this.progressBarWidth = '20%';
+          }, 5000);
+        }
+      }
+    } else if (this.currentStep === 2) {
+      if (this.currentQuestion === 1 && this.form.get('primerNivel')!.invalid) {
+        this.form.get('primerNivel')!.markAllAsTouched();
+      } else if (this.currentQuestion === 2 && this.form.get('segundoNivel')!.invalid) {
+        this.form.get('segundoNivel')!.markAllAsTouched();
+      } else if (this.currentQuestion === 3 && this.form.get('segundoNivelMasTerraza')!.invalid) {
+        this.form.get('segundoNivelMasTerraza')!.markAllAsTouched();
+      } else if (this.currentQuestion === 4 && this.form.get('estiloFachada')!.invalid) {
+        this.form.get('estiloFachada')!.markAsTouched();
+      } else {
+        console.log("Formulario enviado");
+        if (this.currentQuestion < 4) {
+          this.currentQuestion++;
+          this.progressBarWidth = `${(this.currentQuestion + 4) * 20}%`;
+          console.log("Pregunta actual:", this.currentQuestion);
+        } else if (this.currentQuestion === 4) {
+          this.showMessage = true;
+          this.message = '¡ESTUPENDO! CONTINUEMOS CON EL PASO 3.';
+          setTimeout(() => {
+            this.showMessage = false;
+            this.currentStep = 3;
+            this.currentQuestion = 1;
+            this.progressBarWidth = '20%';
+          }, 5000);
+        }
       }
     }
-  }
-
-  onSave() {
-    console.log('Formulario guardado:', this.form.value);
-    // Aquí puedes agregar la lógica para guardar el formulario
-  }
-
-  onCancel() {
-    console.log('Formulario cancelado');
-    this.currentQuestion = 1;
-    this.progressBarWidth = '20%';
-    this.form.reset();
-    this.form.markAsUntouched();
-    this.form.markAsPristine();
   }
 
   onBack() {
@@ -116,14 +155,5 @@ export class DiagnosticoProyectoComponent implements OnInit {
       this.progressBarWidth = `${this.currentQuestion * 20}%`;
       console.log("Pregunta actual:", this.currentQuestion);
     }
-  }
-
-  onFloorChange() {
-    this.selectedFloor = this.form.get('floor')!.value;
-    this.showModal = true;
-  }
-
-  closeModal() {
-    this.showModal = false;
   }
 }
