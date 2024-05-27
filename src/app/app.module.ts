@@ -13,7 +13,7 @@ import { PrimerNivelComponent } from './pages/diagnosticoproyecto/cliente/primer
 import { SegundoNivelComponent } from './pages/diagnosticoproyecto/cliente/segundo-nivel/segundo-nivel.component';
 import { TercerNivelComponent } from './pages/diagnosticoproyecto/cliente/tercer-nivel/tercer-nivel.component';
 import { DiagnosticoProyectoComponent } from './pages/diagnosticoproyecto/diagnostico-proyecto.component';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +29,7 @@ import { DiagnosticoProyectoComponent } from './pages/diagnosticoproyecto/diagno
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     ReactiveFormsModule
   ],
   providers: [],

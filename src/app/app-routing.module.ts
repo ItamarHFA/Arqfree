@@ -10,15 +10,14 @@ import { TercerNivelComponent } from './pages/diagnosticoproyecto/cliente/tercer
 import { DiagnosticoProyectoComponent } from './pages/diagnosticoproyecto/diagnostico-proyecto.component';
 
 const routes: Routes = [
-  {path: 'diagnostico-proyecto', component: DiagnosticoProyectoComponent},
+  {path: 'diagnostico', component: DiagnosticoProyectoComponent},
   { path: 'clientes', component: ClienteComponent },
   { path: 'primer-nivel', component: PrimerNivelComponent},
   { path: 'segundo-nivel', component: SegundoNivelComponent},
   { path: 'tercer-nivel', component: TercerNivelComponent},
   { path: 'cuadro-necesidades', component: CuadroNecesidadesComponent },
   { path: 'datos-adicionales', component: DatosAdicionalesComponent },
-  { path: 'recomendaciones', component: RecomendacionesComponent },
-  { path: '', redirectTo: '/diagnostico-proyecto', pathMatch: 'full' }
+  { path: '**', redirectTo: 'diagnostico', pathMatch: 'full'}
 ];
 
 @NgModule({
