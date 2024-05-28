@@ -211,7 +211,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
           this.message = '¡PERFECTO! GRACIAS POR BRINDARNOS TU INFORMACIÓN.\n\nAHORA SÍ DESCARGA EL PDF';
           setTimeout(() => {
             this.showMessage = false;
-            // Aquí puedes agregar la lógica para permitir la descarga del PDF
+            this.resetForm(); // Resetear el formulario al estado inicial
           }, 5000);
         }
       }
@@ -232,5 +232,12 @@ export class DiagnosticoProyectoComponent implements OnInit {
       this.progressBarWidth = `${this.currentQuestion * 20}%`;
     }
     console.log("Pregunta actual:", this.currentQuestion);
+  }
+
+  resetForm() {
+    this.form.reset();
+    this.currentStep = 1;
+    this.currentQuestion = 1;
+    this.progressBarWidth = '20%';
   }
 }
