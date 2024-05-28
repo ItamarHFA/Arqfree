@@ -23,7 +23,6 @@
       <form [formGroup]="form" (ngSubmit)="onContinue()">
         <ng-container *ngIf="currentStep === 1">
           <!-- Questions for Step 1 -->
-
           <!-- Question 1: Name -->
           <ng-container *ngIf="currentQuestion === 1">
             <div class="mb-4">
@@ -208,9 +207,110 @@
           </ng-container>
         </ng-container>
 
+        <ng-container *ngIf="currentStep === 3">
+          <h1 class="text-4xl font-bold text-gray-700 mb-2">DIAGNÓSTICO DEL PROYECTO</h1>
+          <h2 class="text-2xl font-bold text-gray-700 mb-4">DATOS INTEGRALES</h2>
+          <p class="text-gray-600 mb-4">AHORA CONOZCAMOS UN POCO MÁS SOBRE TU VIVIENDA</p>
+          <!-- Question 1: Número de Integrantes -->
+          <ng-container *ngIf="currentQuestion === 1">
+            <div class="mb-4">
+              <label for="numIntegrantes" class="block text-gray-700 text-sm font-bold mb-2">
+                1 → N° INTEGRANTES
+              </label>
+              <input id="numIntegrantes" formControlName="numIntegrantes" name="numIntegrantes" type="number" placeholder="Número de integrantes"
+                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <div *ngIf="form.get('numIntegrantes')?.invalid && form.get('numIntegrantes')?.touched" class="text-red-500 text-sm mt-2">
+                <div *ngIf="form.get('numIntegrantes')?.errors?.['required']">
+                  Número de integrantes es requerido.
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Question 2: Número de Mascotas -->
+          <ng-container *ngIf="currentQuestion === 2">
+            <div class="mb-4">
+              <label for="numMascotas" class="block text-gray-700 text-sm font-bold mb-2">
+                2 → N° MASCOTAS
+              </label>
+              <input id="numMascotas" formControlName="numMascotas" name="numMascotas" type="number" placeholder="Número de mascotas"
+                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <div *ngIf="form.get('numMascotas')?.invalid && form.get('numMascotas')?.touched" class="text-red-500 text-sm mt-2">
+                <div *ngIf="form.get('numMascotas')?.errors?.['required']">
+                  Número de mascotas es requerido.
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Question 3: Modelo Automóvil -->
+          <ng-container *ngIf="currentQuestion === 3">
+            <div class="mb-4">
+              <label for="modeloAutomovil" class="block text-gray-700 text-sm font-bold mb-2">
+                3 → MODELO AUTOMÓVIL
+              </label>
+              <input id="modeloAutomovil" formControlName="modeloAutomovil" name="modeloAutomovil" type="text" placeholder="Modelo de automóvil"
+                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <div *ngIf="form.get('modeloAutomovil')?.invalid && form.get('modeloAutomovil')?.touched" class="text-red-500 text-sm mt-2">
+                <div *ngIf="form.get('modeloAutomovil')?.errors?.['required']">
+                  Modelo de automóvil es requerido.
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Question 4: Colores Favoritos -->
+          <ng-container *ngIf="currentQuestion === 4">
+            <div class="mb-4">
+              <label for="coloresFavoritos" class="block text-gray-700 text-sm font-bold mb-2">
+                4 → COLORES FAVORITOS
+              </label>
+              <input id="coloresFavoritos" formControlName="coloresFavoritos" name="coloresFavoritos" type="text" placeholder="Colores favoritos"
+                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <div *ngIf="form.get('coloresFavoritos')?.invalid && form.get('coloresFavoritos')?.touched" class="text-red-500 text-sm mt-2">
+                <div *ngIf="form.get('coloresFavoritos')?.errors?.['required']">
+                  Colores favoritos es requerido.
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Question 5: Espacios Favoritos -->
+          <ng-container *ngIf="currentQuestion === 5">
+            <div class="mb-4">
+              <label for="espaciosFavoritos" class="block text-gray-700 text-sm font-bold mb-2">
+                5 → ESPACIOS FAVORITOS
+              </label>
+              <input id="espaciosFavoritos" formControlName="espaciosFavoritos" name="espaciosFavoritos" type="text" placeholder="Espacios favoritos"
+                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <div *ngIf="form.get('espaciosFavoritos')?.invalid && form.get('espaciosFavoritos')?.touched" class="text-red-500 text-sm mt-2">
+                <div *ngIf="form.get('espaciosFavoritos')?.errors?.['required']">
+                  Espacios favoritos es requerido.
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Question 6: Referencia de Vivienda -->
+          <ng-container *ngIf="currentQuestion === 6">
+            <div class="mb-4">
+              <label for="referenciaVivienda" class="block text-gray-700 text-sm font-bold mb-2">
+                6 → REFERENCIA DE VIVIENDA
+              </label>
+              <input id="referenciaVivienda" formControlName="referenciaVivienda" name="referenciaVivienda" type="text" placeholder="Referencia de vivienda"
+                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <div *ngIf="form.get('referenciaVivienda')?.invalid && form.get('referenciaVivienda')?.touched" class="text-red-500 text-sm mt-2">
+                <div *ngIf="form.get('referenciaVivienda')?.errors?.['required']">
+                  Referencia de vivienda es requerido.
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
         <!-- Buttons -->
         <div class="flex items-center justify-between">
-          <button *ngIf="currentQuestion > 1 || (currentStep === 2 && currentQuestion === 1)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" type="button" (click)="onBack()">
+          <button *ngIf="currentQuestion > 1 || (currentStep === 3 && currentQuestion === 1)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" type="button" (click)="onBack()">
             REGRESAR
           </button>
           <button class="bg-lime-green hover:bg-lime-green-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" type="submit">

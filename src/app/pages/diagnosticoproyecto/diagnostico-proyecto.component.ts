@@ -46,7 +46,13 @@ export class DiagnosticoProyectoComponent implements OnInit {
       segundoNivel: this.fb.array(this.segundoNivel.map(() => this.fb.control(false)), this.minSelectedCheckboxesOrOtros(1)),
       segundoNivelMasTerraza: this.fb.array(this.segundoNivelMasTerraza.map(() => this.fb.control(false)), this.minSelectedCheckboxes(1)),
       otros: [''],
-      estiloFachada: ['', Validators.required]
+      estiloFachada: ['', Validators.required],
+      numIntegrantes: ['', Validators.required],
+      numMascotas: ['', Validators.required],
+      modeloAutomovil: ['', Validators.required],
+      coloresFavoritos: ['', Validators.required],
+      espaciosFavoritos: ['', Validators.required],
+      referenciaVivienda: ['', Validators.required]
     });
 
     this.form.get('country')!.valueChanges.subscribe(value => {
@@ -172,12 +178,40 @@ export class DiagnosticoProyectoComponent implements OnInit {
           console.log("Pregunta actual:", this.currentQuestion);
         } else if (this.currentQuestion === 4) {
           this.showMessage = true;
-          this.message = '¡ESTUPENDO! CONTINUEMOS CON EL PASO 3.';
+          this.message = '¡ESTUPENDO! CONTINUEMOS CON EL PASO 3';
           setTimeout(() => {
             this.showMessage = false;
             this.currentStep = 3;
             this.currentQuestion = 1;
             this.progressBarWidth = '20%';
+          }, 5000);
+        }
+      }
+    } else if (this.currentStep === 3) {
+      if (this.currentQuestion === 1 && this.form.get('numIntegrantes')!.invalid) {
+        this.form.get('numIntegrantes')!.markAsTouched();
+      } else if (this.currentQuestion === 2 && this.form.get('numMascotas')!.invalid) {
+        this.form.get('numMascotas')!.markAsTouched();
+      } else if (this.currentQuestion === 3 && this.form.get('modeloAutomovil')!.invalid) {
+        this.form.get('modeloAutomovil')!.markAsTouched();
+      } else if (this.currentQuestion === 4 && this.form.get('coloresFavoritos')!.invalid) {
+        this.form.get('coloresFavoritos')!.markAsTouched();
+      } else if (this.currentQuestion === 5 && this.form.get('espaciosFavoritos')!.invalid) {
+        this.form.get('espaciosFavoritos')!.markAsTouched();
+      } else if (this.currentQuestion === 6 && this.form.get('referenciaVivienda')!.invalid) {
+        this.form.get('referenciaVivienda')!.markAsTouched();
+      } else {
+        console.log("Formulario enviado");
+        if (this.currentQuestion < 6) {
+          this.currentQuestion++;
+          this.progressBarWidth = `${(this.currentQuestion + 4) * 20}%`;
+          console.log("Pregunta actual:", this.currentQuestion);
+        } else if (this.currentQuestion === 6) {
+          this.showMessage = true;
+          this.message = '¡PERFECTO! GRACIAS POR BRINDARNOS TU INFORMACIÓN.\n\nAHORA SÍ DESCARGA EL PDF';
+          setTimeout(() => {
+            this.showMessage = false;
+            // Aquí puedes agregar la lógica para permitir la descarga del PDF
           }, 5000);
         }
       }
@@ -189,6 +223,10 @@ export class DiagnosticoProyectoComponent implements OnInit {
       this.currentStep = 1;
       this.currentQuestion = 5;
       this.progressBarWidth = '100%';
+    } else if (this.currentStep === 3 && this.currentQuestion === 1) {
+      this.currentStep = 2;
+      this.currentQuestion = 4;
+      this.progressBarWidth = '80%';
     } else if (this.currentQuestion > 1) {
       this.currentQuestion--;
       this.progressBarWidth = `${this.currentQuestion * 20}%`;
