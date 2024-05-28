@@ -3,7 +3,10 @@
     <h1 class="text-4xl font-bold text-gray-700 mb-2">DIAGNÓSTICO DEL PROYECTO</h1>
     <div class="my-8">
       <p *ngIf="currentStep === 1" class="text-gray-600 mb-2">A TRAVÉS DE ESTE FORMULARIO LOGRAREMOS ASESORARTE MEJOR</p>
+      <h2 *ngIf="currentStep === 2" class="text-2xl font-bold text-gray-700 mb-4">CUADRO DE NECESIDADES</h2>
       <p *ngIf="currentStep === 2" class="text-gray-600 mb-2">AHORA SÍ! INICIEMOS CON EL DIAGNÓSTICO</p>
+      <h2 *ngIf="currentStep === 3" class="text-2xl font-bold text-gray-700 mb-4">DATOS INTEGRALES</h2>
+      <p *ngIf="currentStep === 3" class="text-gray-600 mb-2">AHORA CONOZCAMOS UN POCO MÁS SOBRE TU VIVIENDA</p>
       <div class="w-3/4 mx-auto text-center">
         <p class="text-gray-700 font-bold mb-2">INFORMACIÓN GENERAL</p>
         <div class="flex items-center justify-between mb-2">
@@ -128,8 +131,6 @@
         </ng-container>
 
         <ng-container *ngIf="currentStep === 2">
-          <h2 class="text-2xl font-bold text-gray-700 mb-4">CUADRO DE NECESIDADES</h2>
-          <p class="text-gray-600 mb-4">AHORA SÍ! INICIEMOS CON EL DIAGNÓSTICO</p>
           <!-- Question 1: Primer Nivel -->
           <ng-container *ngIf="currentQuestion === 1">
             <div class="mb-4">
@@ -208,12 +209,9 @@
         </ng-container>
 
         <ng-container *ngIf="currentStep === 3">
-          <h1 class="text-4xl font-bold text-gray-700 mb-2">DIAGNÓSTICO DEL PROYECTO</h1>
-          <h2 class="text-2xl font-bold text-gray-700 mb-4">DATOS INTEGRALES</h2>
-          <p class="text-gray-600 mb-4">AHORA CONOZCAMOS UN POCO MÁS SOBRE TU VIVIENDA</p>
-          <!-- Question 1: Número de Integrantes -->
-          <ng-container *ngIf="currentQuestion === 1">
-            <div class="mb-4">
+          <!-- Mostrar todas las preguntas en un solo contenedor -->
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
               <label for="numIntegrantes" class="block text-gray-700 text-sm font-bold mb-2">
                 1 → N° INTEGRANTES
               </label>
@@ -225,27 +223,29 @@
                 </div>
               </div>
             </div>
-          </ng-container>
-
-          <!-- Question 2: Número de Mascotas -->
-          <ng-container *ngIf="currentQuestion === 2">
-            <div class="mb-4">
-              <label for="numMascotas" class="block text-gray-700 text-sm font-bold mb-2">
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2">
                 2 → N° MASCOTAS
               </label>
-              <input id="numMascotas" formControlName="numMascotas" name="numMascotas" type="number" placeholder="Número de mascotas"
-                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <div class="flex items-center space-x-4">
+                <div>
+                  <input type="radio" id="mascotasSi" formControlName="numMascotas" value="Sí" class="mr-2 leading-tight">
+                  <label for="mascotasSi" class="text-gray-700">Sí</label>
+                </div>
+                <div>
+                  <input type="radio" id="mascotasNo" formControlName="numMascotas" value="No" class="mr-2 leading-tight">
+                  <label for="mascotasNo" class="text-gray-700">No</label>
+                </div>
+              </div>
               <div *ngIf="form.get('numMascotas')?.invalid && form.get('numMascotas')?.touched" class="text-red-500 text-sm mt-2">
                 <div *ngIf="form.get('numMascotas')?.errors?.['required']">
-                  Número de mascotas es requerido.
+                  Debes seleccionar si tienes mascotas.
                 </div>
               </div>
             </div>
-          </ng-container>
-
-          <!-- Question 3: Modelo Automóvil -->
-          <ng-container *ngIf="currentQuestion === 3">
-            <div class="mb-4">
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
               <label for="modeloAutomovil" class="block text-gray-700 text-sm font-bold mb-2">
                 3 → MODELO AUTOMÓVIL
               </label>
@@ -257,11 +257,7 @@
                 </div>
               </div>
             </div>
-          </ng-container>
-
-          <!-- Question 4: Colores Favoritos -->
-          <ng-container *ngIf="currentQuestion === 4">
-            <div class="mb-4">
+            <div>
               <label for="coloresFavoritos" class="block text-gray-700 text-sm font-bold mb-2">
                 4 → COLORES FAVORITOS
               </label>
@@ -273,11 +269,9 @@
                 </div>
               </div>
             </div>
-          </ng-container>
-
-          <!-- Question 5: Espacios Favoritos -->
-          <ng-container *ngIf="currentQuestion === 5">
-            <div class="mb-4">
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
               <label for="espaciosFavoritos" class="block text-gray-700 text-sm font-bold mb-2">
                 5 → ESPACIOS FAVORITOS
               </label>
@@ -289,11 +283,7 @@
                 </div>
               </div>
             </div>
-          </ng-container>
-
-          <!-- Question 6: Referencia de Vivienda -->
-          <ng-container *ngIf="currentQuestion === 6">
-            <div class="mb-4">
+            <div>
               <label for="referenciaVivienda" class="block text-gray-700 text-sm font-bold mb-2">
                 6 → REFERENCIA DE VIVIENDA
               </label>
@@ -305,7 +295,7 @@
                 </div>
               </div>
             </div>
-          </ng-container>
+          </div>
         </ng-container>
 
         <!-- Buttons -->

@@ -1,6 +1,5 @@
 
 import { Component, OnInit } from '@angular/core';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 @Component({
   selector: 'app-diagnostico-proyecto',
