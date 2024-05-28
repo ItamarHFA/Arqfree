@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-gradient-construction">
-  <div class="text-center py-8">
+  <div class="text-center py-4"> <!-- Reducido el padding superior -->
     <h1 class="text-4xl font-bold text-gray-700 mb-2">DIAGNÓSTICO DEL PROYECTO</h1>
-    <div class="my-8">
+    <div class="my-4"> <!-- Reducido el margen superior e inferior -->
       <p *ngIf="currentStep === 1" class="text-gray-600 mb-2">A TRAVÉS DE ESTE FORMULARIO LOGRAREMOS ASESORARTE MEJOR</p>
       <h2 *ngIf="currentStep === 2" class="text-2xl font-bold text-gray-700 mb-4">CUADRO DE NECESIDADES</h2>
       <p *ngIf="currentStep === 2" class="text-gray-600 mb-2">AHORA SÍ! INICIEMOS CON EL DIAGNÓSTICO</p>
@@ -21,7 +21,7 @@
       </div>
     </div>
   </div>
-  <div class="flex items-center justify-center mt-20">
+  <div class="flex items-center justify-center mt-1 mb-5"> <!-- Margen superior casi eliminado -->
     <div class="relative z-10 p-10 bg-white shadow-lg rounded-3xl border border-gray-300 max-w-3xl w-full">
       <form [formGroup]="form" (ngSubmit)="onContinue()">
         <ng-container *ngIf="currentStep === 1">
