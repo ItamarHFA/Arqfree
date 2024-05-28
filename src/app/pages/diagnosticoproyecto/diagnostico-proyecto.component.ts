@@ -46,7 +46,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
       segundoNivelMasTerraza: this.fb.array(this.segundoNivelMasTerraza.map(() => this.fb.control(false)), this.minSelectedCheckboxes(1)),
       otros: [''],
       estiloFachada: ['', Validators.required],
-      numIntegrantes: ['', Validators.required],
+      numIntegrantes: ['', [Validators.required, Validators.min(0)]],
       numMascotas: ['', Validators.required],
       modeloAutomovil: ['', Validators.required],
       coloresFavoritos: ['', Validators.required],
@@ -187,32 +187,27 @@ export class DiagnosticoProyectoComponent implements OnInit {
         }
       }
     } else if (this.currentStep === 3) {
-      if (this.currentQuestion === 1 && this.form.get('numIntegrantes')!.invalid) {
+      // Validar todas las preguntas del paso 3
+      if (this.form.get('numIntegrantes')!.invalid) {
         this.form.get('numIntegrantes')!.markAsTouched();
-      } else if (this.currentQuestion === 2 && this.form.get('numMascotas')!.invalid) {
+      } else if (this.form.get('numMascotas')!.invalid) {
         this.form.get('numMascotas')!.markAsTouched();
-      } else if (this.currentQuestion === 3 && this.form.get('modeloAutomovil')!.invalid) {
+      } else if (this.form.get('modeloAutomovil')!.invalid) {
         this.form.get('modeloAutomovil')!.markAsTouched();
-      } else if (this.currentQuestion === 4 && this.form.get('coloresFavoritos')!.invalid) {
+      } else if (this.form.get('coloresFavoritos')!.invalid) {
         this.form.get('coloresFavoritos')!.markAsTouched();
-      } else if (this.currentQuestion === 5 && this.form.get('espaciosFavoritos')!.invalid) {
+      } else if (this.form.get('espaciosFavoritos')!.invalid) {
         this.form.get('espaciosFavoritos')!.markAsTouched();
-      } else if (this.currentQuestion === 6 && this.form.get('referenciaVivienda')!.invalid) {
+      } else if (this.form.get('referenciaVivienda')!.invalid) {
         this.form.get('referenciaVivienda')!.markAsTouched();
       } else {
         console.log("Formulario enviado");
-        if (this.currentQuestion < 6) {
-          this.currentQuestion++;
-          this.progressBarWidth = `${(this.currentQuestion + 4) * 20}%`;
-          console.log("Pregunta actual:", this.currentQuestion);
-        } else if (this.currentQuestion === 6) {
-          this.showMessage = true;
-          this.message = '¡PERFECTO! GRACIAS POR BRINDARNOS TU INFORMACIÓN.\n\nAHORA SÍ DESCARGA EL PDF';
-          setTimeout(() => {
-            this.showMessage = false;
-            this.resetForm(); // Resetear el formulario al estado inicial
-          }, 5000);
-        }
+        this.showMessage = true;
+        this.message = '¡PERFECTO! GRACIAS POR BRINDARNOS TU INFORMACIÓN.\n\nAHORA SÍ DESCARGA EL PDF';
+        setTimeout(() => {
+          this.showMessage = false;
+          this.resetForm(); // Resetear el formulario al estado inicial
+        }, 5000);
       }
     }
   }
@@ -234,7 +229,9 @@ export class DiagnosticoProyectoComponent implements OnInit {
   }
 
   resetForm() {
-    this.form.reset();
+    this.form.reset({
+      country: '' // Establecer el valor inicial del país en vacío
+    });
     this.currentStep = 1;
     this.currentQuestion = 1;
     this.progressBarWidth = '20%';

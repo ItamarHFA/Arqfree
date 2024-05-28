@@ -215,17 +215,34 @@
               <label for="numIntegrantes" class="block text-gray-700 text-sm font-bold mb-2">
                 1 → N° INTEGRANTES
               </label>
-              <input id="numIntegrantes" formControlName="numIntegrantes" name="numIntegrantes" type="number" placeholder="Número de integrantes"
+              <input id="numIntegrantes" formControlName="numIntegrantes" name="numIntegrantes" type="number" placeholder="Número de integrantes" min="0"
                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               <div *ngIf="form.get('numIntegrantes')?.invalid && form.get('numIntegrantes')?.touched" class="text-red-500 text-sm mt-2">
                 <div *ngIf="form.get('numIntegrantes')?.errors?.['required']">
                   Número de integrantes es requerido.
                 </div>
+                <div *ngIf="form.get('numIntegrantes')?.errors?.['min']">
+                  Número de integrantes no puede ser negativo.
+                </div>
               </div>
             </div>
             <div>
-              <label class="block text-gray-700 text-sm font-bold mb-2">
-                2 → N° MASCOTAS
+              <label for="coloresFavoritos" class="block text-gray-700 text-sm font-bold mb-2">
+                2 → COLORES FAVORITOS
+              </label>
+              <input id="coloresFavoritos" formControlName="coloresFavoritos" name="coloresFavoritos" type="text" placeholder="Colores favoritos"
+                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <div *ngIf="form.get('coloresFavoritos')?.invalid && form.get('coloresFavoritos')?.touched" class="text-red-500 text-sm mt-2">
+                <div *ngIf="form.get('coloresFavoritos')?.errors?.['required']">
+                  Colores favoritos es requerido.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label for="numMascotas" class="block text-gray-700 text-sm font-bold mb-2">
+                3 → MASCOTAS
               </label>
               <div class="flex items-center space-x-4">
                 <div>
@@ -243,43 +260,29 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <label for="modeloAutomovil" class="block text-gray-700 text-sm font-bold mb-2">
-                3 → MODELO AUTOMÓVIL
-              </label>
-              <input id="modeloAutomovil" formControlName="modeloAutomovil" name="modeloAutomovil" type="text" placeholder="Modelo de automóvil"
-                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-              <div *ngIf="form.get('modeloAutomovil')?.invalid && form.get('modeloAutomovil')?.touched" class="text-red-500 text-sm mt-2">
-                <div *ngIf="form.get('modeloAutomovil')?.errors?.['required']">
-                  Modelo de automóvil es requerido.
-                </div>
-              </div>
-            </div>
-            <div>
-              <label for="coloresFavoritos" class="block text-gray-700 text-sm font-bold mb-2">
-                4 → COLORES FAVORITOS
-              </label>
-              <input id="coloresFavoritos" formControlName="coloresFavoritos" name="coloresFavoritos" type="text" placeholder="Colores favoritos"
-                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-              <div *ngIf="form.get('coloresFavoritos')?.invalid && form.get('coloresFavoritos')?.touched" class="text-red-500 text-sm mt-2">
-                <div *ngIf="form.get('coloresFavoritos')?.errors?.['required']">
-                  Colores favoritos es requerido.
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="grid grid-cols-2 gap-4 mb-4">
             <div>
               <label for="espaciosFavoritos" class="block text-gray-700 text-sm font-bold mb-2">
-                5 → ESPACIOS FAVORITOS
+                4 → ESPACIOS FAVORITOS
               </label>
               <input id="espaciosFavoritos" formControlName="espaciosFavoritos" name="espaciosFavoritos" type="text" placeholder="Espacios favoritos"
                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               <div *ngIf="form.get('espaciosFavoritos')?.invalid && form.get('espaciosFavoritos')?.touched" class="text-red-500 text-sm mt-2">
                 <div *ngIf="form.get('espaciosFavoritos')?.errors?.['required']">
                   Espacios favoritos es requerido.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label for="modeloAutomovil" class="block text-gray-700 text-sm font-bold mb-2">
+                5 → MODELO AUTOMÓVIL
+              </label>
+              <input id="modeloAutomovil" formControlName="modeloAutomovil" name="modeloAutomovil" type="text" placeholder="Modelo de automóvil"
+                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <div *ngIf="form.get('modeloAutomovil')?.invalid && form.get('modeloAutomovil')?.touched" class="text-red-500 text-sm mt-2">
+                <div *ngIf="form.get('modeloAutomovil')?.errors?.['required']">
+                  Modelo de automóvil es requerido.
                 </div>
               </div>
             </div>
