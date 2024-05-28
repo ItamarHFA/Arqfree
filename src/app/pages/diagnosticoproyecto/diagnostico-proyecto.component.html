@@ -143,6 +143,9 @@
                   <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
                 </div>
               </div>
+              <div *ngIf="form.get('primerNivel')?.touched && form.get('primerNivel')?.errors?.['required']" class="text-red-500 text-sm mt-2">
+                Debes seleccionar al menos una opción.
+              </div>
             </div>
           </ng-container>
 
@@ -157,7 +160,13 @@
                   <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
                   <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
                 </div>
-                <input type="text" formControlName="otros" placeholder="Otros" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2">
+              </div>
+              <div class="mt-4">
+                <label for="otros" class="block text-gray-700 text-sm font-bold mb-2">Otros:</label>
+                <input id="otros" formControlName="otros" type="text" placeholder="Especifique otros" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              </div>
+              <div *ngIf="form.get('segundoNivel')?.touched && form.get('segundoNivel')?.errors?.['required']" class="text-red-500 text-sm mt-2">
+                Debes seleccionar al menos una opción o completar la casilla de otros.
               </div>
             </div>
           </ng-container>
@@ -174,6 +183,9 @@
                   <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
                 </div>
               </div>
+              <div *ngIf="form.get('segundoNivelMasTerraza')?.touched && form.get('segundoNivelMasTerraza')?.errors?.['required']" class="text-red-500 text-sm mt-2">
+                Debes seleccionar al menos una opción.
+              </div>
             </div>
           </ng-container>
 
@@ -188,6 +200,9 @@
                   <input type="radio" id="{{estilo}}" formControlName="estiloFachada" [value]="estilo" class="mr-2 leading-tight">
                   <label for="{{estilo}}" class="text-gray-700">{{ estilo }}</label>
                 </div>
+              </div>
+              <div *ngIf="form.get('estiloFachada')?.touched && form.get('estiloFachada')?.errors?.['required']" class="text-red-500 text-sm mt-2">
+                Debes seleccionar un estilo de fachada.
               </div>
             </div>
           </ng-container>

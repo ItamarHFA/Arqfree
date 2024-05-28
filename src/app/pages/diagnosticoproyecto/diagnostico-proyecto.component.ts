@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 @Component({
   selector: 'app-diagnostico-proyecto',
   templateUrl: './diagnostico-proyecto.component.html',
@@ -42,9 +42,9 @@ export class DiagnosticoProyectoComponent implements OnInit {
       floor: ['', Validators.required],
       country: ['', Validators.required],
       address: [''],
-      primerNivel: this.fb.array(this.primerNivel.map(() => this.fb.control(false))),
-      segundoNivel: this.fb.array(this.segundoNivel.map(() => this.fb.control(false))),
-      segundoNivelMasTerraza: this.fb.array(this.segundoNivelMasTerraza.map(() => this.fb.control(false))),
+      primerNivel: this.fb.array(this.primerNivel.map(() => this.fb.control(false)), this.minSelectedCheckboxes(1)),
+      segundoNivel: this.fb.array(this.segundoNivel.map(() => this.fb.control(false)), this.minSelectedCheckboxesOrOtros(1)),
+      segundoNivelMasTerraza: this.fb.array(this.segundoNivelMasTerraza.map(() => this.fb.control(false)), this.minSelectedCheckboxes(1)),
       otros: [''],
       estiloFachada: ['', Validators.required]
     });
@@ -56,6 +56,11 @@ export class DiagnosticoProyectoComponent implements OnInit {
         this.form.get('address')!.clearValidators();
       }
       this.form.get('address')!.updateValueAndValidity();
+    });
+
+    // Subscribe to value changes of 'otros' field to revalidate 'segundoNivel' form array
+    this.form.get('otros')!.valueChanges.subscribe(() => {
+      this.form.get('segundoNivel')!.updateValueAndValidity();
     });
   }
 
@@ -93,6 +98,25 @@ export class DiagnosticoProyectoComponent implements OnInit {
 
   get segundoNivelMasTerrazaControls() {
     return (this.form.get('segundoNivelMasTerraza') as FormArray).controls;
+  }
+
+  minSelectedCheckboxes(min: number) {
+    return (formArray: AbstractControl) => {
+      const totalSelected = (formArray as FormArray).controls
+        .map(control => control.value)
+        .reduce((prev, next) => next ? prev + 1 : prev, 0);
+      return totalSelected >= min ? null : { required: true };
+    };
+  }
+
+  minSelectedCheckboxesOrOtros(min: number) {
+    return (formArray: AbstractControl) => {
+      const totalSelected = (formArray as FormArray).controls
+        .map(control => control.value)
+        .reduce((prev, next) => next ? prev + 1 : prev, 0);
+      const otrosValue = this.form?.get('otros')?.value;
+      return totalSelected >= min || (otrosValue && otrosValue.trim() !== '') ? null : { required: true };
+    };
   }
 
   onProjectTypeChange() {
@@ -135,6 +159,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
         this.form.get('primerNivel')!.markAllAsTouched();
       } else if (this.currentQuestion === 2 && this.form.get('segundoNivel')!.invalid) {
         this.form.get('segundoNivel')!.markAllAsTouched();
+        this.form.get('otros')!.markAsTouched();
       } else if (this.currentQuestion === 3 && this.form.get('segundoNivelMasTerraza')!.invalid) {
         this.form.get('segundoNivelMasTerraza')!.markAllAsTouched();
       } else if (this.currentQuestion === 4 && this.form.get('estiloFachada')!.invalid) {
