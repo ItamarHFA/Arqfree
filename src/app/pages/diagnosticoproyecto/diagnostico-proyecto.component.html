@@ -22,6 +22,8 @@
     <div class="relative z-10 p-10 bg-white shadow-lg rounded-3xl border border-gray-300 max-w-3xl w-full">
       <form [formGroup]="form" (ngSubmit)="onContinue()">
         <ng-container *ngIf="currentStep === 1">
+          <!-- Questions for Step 1 -->
+
           <!-- Question 1: Name -->
           <ng-container *ngIf="currentQuestion === 1">
             <div class="mb-4">
@@ -40,7 +42,7 @@
               </div>
             </div>
           </ng-container>
-          
+
           <!-- Question 2: Project Type -->
           <ng-container *ngIf="currentQuestion === 2">
             <div class="mb-4">
@@ -129,16 +131,15 @@
         <ng-container *ngIf="currentStep === 2">
           <h2 class="text-2xl font-bold text-gray-700 mb-4">CUADRO DE NECESIDADES</h2>
           <p class="text-gray-600 mb-4">AHORA SÍ! INICIEMOS CON EL DIAGNÓSTICO</p>
-          <!-- Second Step Questions -->
           <!-- Question 1: Primer Nivel -->
           <ng-container *ngIf="currentQuestion === 1">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2">
                 1 → PRIMER NIVEL (PUEDE ELEGIR UNA O MÁS OPCIONES)
               </label>
-              <div>
-                <div *ngFor="let nivel of primerNivel">
-                  <input type="checkbox" id="{{nivel}}" formControlName="primerNivel" [value]="nivel" class="mr-2 leading-tight">
+              <div [formArrayName]="'primerNivel'">
+                <div *ngFor="let nivel of primerNivel; let i = index">
+                  <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
                   <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
                 </div>
               </div>
@@ -151,9 +152,9 @@
               <label class="block text-gray-700 text-sm font-bold mb-2">
                 2 → SEGUNDO NIVEL (PUEDE ELEGIR UNA O MÁS OPCIONES)
               </label>
-              <div>
-                <div *ngFor="let nivel of segundoNivel">
-                  <input type="checkbox" id="{{nivel}}" formControlName="segundoNivel" [value]="nivel" class="mr-2 leading-tight">
+              <div [formArrayName]="'segundoNivel'">
+                <div *ngFor="let nivel of segundoNivel; let i = index">
+                  <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
                   <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
                 </div>
                 <input type="text" formControlName="otros" placeholder="Otros" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2">
@@ -167,9 +168,9 @@
               <label class="block text-gray-700 text-sm font-bold mb-2">
                 3 → SEGUNDO NIVEL + TERRAZA (PUEDE ELEGIR UNA O MÁS OPCIONES)
               </label>
-              <div>
-                <div *ngFor="let nivel of segundoNivelMasTerraza">
-                  <input type="checkbox" id="{{nivel}}" formControlName="segundoNivelMasTerraza" [value]="nivel" class="mr-2 leading-tight">
+              <div [formArrayName]="'segundoNivelMasTerraza'">
+                <div *ngFor="let nivel of segundoNivelMasTerraza; let i = index">
+                  <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
                   <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
                 </div>
               </div>
@@ -194,7 +195,7 @@
 
         <!-- Buttons -->
         <div class="flex items-center justify-between">
-          <button *ngIf="currentQuestion > 1 && currentQuestion < 6" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" type="button" (click)="onBack()">
+          <button *ngIf="currentQuestion > 1 || (currentStep === 2 && currentQuestion === 1)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" type="button" (click)="onBack()">
             REGRESAR
           </button>
           <button class="bg-lime-green hover:bg-lime-green-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" type="submit">

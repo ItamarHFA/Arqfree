@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 @Component({
   selector: 'app-diagnostico-proyecto',
   templateUrl: './diagnostico-proyecto.component.html',
@@ -29,8 +29,6 @@ export class DiagnosticoProyectoComponent implements OnInit {
   segundoNivelMasTerraza = ['ZONA DE SERVICIO', 'ZONA SOCIAL'];
   estilosFachada = ['INTROSPECTIVA', 'MODERNA', 'POSMODERNA'];
   form!: FormGroup;
-  showModal = false;
-  selectedFloor: string | null = null;
   showMessage = false;
   message = '';
 
@@ -44,9 +42,9 @@ export class DiagnosticoProyectoComponent implements OnInit {
       floor: ['', Validators.required],
       country: ['', Validators.required],
       address: [''],
-      primerNivel: [[]],
-      segundoNivel: [[]],
-      segundoNivelMasTerraza: [[]],
+      primerNivel: this.fb.array(this.primerNivel.map(() => this.fb.control(false))),
+      segundoNivel: this.fb.array(this.segundoNivel.map(() => this.fb.control(false))),
+      segundoNivelMasTerraza: this.fb.array(this.segundoNivelMasTerraza.map(() => this.fb.control(false))),
       otros: [''],
       estiloFachada: ['', Validators.required]
     });
@@ -83,6 +81,18 @@ export class DiagnosticoProyectoComponent implements OnInit {
 
   get address() {
     return this.form.get('address');
+  }
+
+  get primerNivelControls() {
+    return (this.form.get('primerNivel') as FormArray).controls;
+  }
+
+  get segundoNivelControls() {
+    return (this.form.get('segundoNivel') as FormArray).controls;
+  }
+
+  get segundoNivelMasTerrazaControls() {
+    return (this.form.get('segundoNivelMasTerraza') as FormArray).controls;
   }
 
   onProjectTypeChange() {
@@ -150,10 +160,14 @@ export class DiagnosticoProyectoComponent implements OnInit {
   }
 
   onBack() {
-    if (this.currentQuestion > 1) {
+    if (this.currentStep === 2 && this.currentQuestion === 1) {
+      this.currentStep = 1;
+      this.currentQuestion = 5;
+      this.progressBarWidth = '100%';
+    } else if (this.currentQuestion > 1) {
       this.currentQuestion--;
       this.progressBarWidth = `${this.currentQuestion * 20}%`;
-      console.log("Pregunta actual:", this.currentQuestion);
     }
+    console.log("Pregunta actual:", this.currentQuestion);
   }
 }
