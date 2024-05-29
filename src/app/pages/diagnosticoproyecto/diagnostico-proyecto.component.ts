@@ -177,7 +177,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
           this.currentQuestion++;
         } else if (this.currentQuestion === this.totalQuestionsStep1) {
           this.showMessage = true;
-          this.message = '¡GENIAL! HAZ CULMINADO EL PASO 1\nCONTINUEMOS CON EL PASO 2';
+          this.message = '¡GENIAL! HAZ CULMINADO EL PASO 1';
           setTimeout(() => {
             this.showMessage = false;
             this.currentStep = 2;
