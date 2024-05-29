@@ -252,6 +252,10 @@ export class DiagnosticoProyectoComponent implements OnInit {
     this.updateProgressBar();
   }
 
+  closeMessage() {
+    this.showMessage = false;
+  }
+
   resetForm() {
     this.form.reset({
       country: ''
