@@ -177,13 +177,13 @@ export class DiagnosticoProyectoComponent implements OnInit {
           this.currentQuestion++;
         } else if (this.currentQuestion === this.totalQuestionsStep1) {
           this.showMessage = true;
-          this.message = '¡GENIAL! HAZ CULMINADO EL PASO 1';
+          this.message = '¡Genial! Haz culminado el paso 1';
           setTimeout(() => {
             this.showMessage = false;
             this.currentStep = 2;
             this.currentQuestion = 1;
             this.updateProgressBar();
-          }, 5000);
+          }, 2000);
         }
       }
     } else if (this.currentStep === 2) {
@@ -203,13 +203,13 @@ export class DiagnosticoProyectoComponent implements OnInit {
           this.currentQuestion++;
         } else if (this.currentQuestion === this.totalQuestionsStep2) {
           this.showMessage = true;
-          this.message = '¡ESTUPENDO! CONTINUEMOS CON EL PASO 3';
+          this.message = 'Continuemos con el paso 3';
           setTimeout(() => {
             this.showMessage = false;
             this.currentStep = 3;
             this.currentQuestion = 1;
             this.updateProgressBar();
-          }, 5000);
+          }, 2000);
         }
       }
     } else if (this.currentStep === 3) {
@@ -228,11 +228,11 @@ export class DiagnosticoProyectoComponent implements OnInit {
         this.form.get('referenciaVivienda')!.markAsTouched();
       } else {
         this.showMessage = true;
-        this.message = '¡PERFECTO! GRACIAS POR BRINDARNOS TU INFORMACIÓN.\n\nAHORA SÍ DESCARGA EL PDF';
+        this.message = '¡Perfecto! Gracias por brindarnos tu información.\n\nAhora sí descarga tu pdf';
         setTimeout(() => {
           this.showMessage = false;
           this.resetForm(); // Resetear el formulario al estado inicial
-        }, 5000);
+        }, 2000);
       }
     }
 
