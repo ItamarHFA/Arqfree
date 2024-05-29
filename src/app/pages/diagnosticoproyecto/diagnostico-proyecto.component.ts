@@ -1,6 +1,6 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
+
 @Component({
   selector: 'app-diagnostico-proyecto',
   templateUrl: './diagnostico-proyecto.component.html',
@@ -29,10 +29,13 @@ export class DiagnosticoProyectoComponent implements OnInit {
     'Nigeria', 'Sudáfrica', 'Egipto', 'Argelia', 'Etiopía', 'Ghana', 'Kenia', 'Uganda', 'Angola', 'Mozambique',
     'Estados Unidos', 'Canadá', 'México'
   ];
+  countryCodes = ['+54', '+591', '+55', '+56', '+57', '+593', '+592', '+595', '+51', '+597', '+598', '+58', '+49', '+34', '+33', '+39', '+44', '+351', '+7', '+31', '+32', '+41', '+234', '+27', '+20', '+213', '+251', '+233', '+254', '+256', '+244', '+258', '+1', '+52'];
+  
   primerNivel = ['COMEDOR', 'BAÑO DE VISITA', 'ESTACIONAMIENTO', 'ESTUDIO', 'SALA', 'COCINA', 'DORMITORIO', 'TERRAZA'];
   segundoNivel = ['DORMITORIO PRINCIPAL', 'DORMITORIO SECUNDARIO', 'ZONA DE STAR'];
   segundoNivelMasTerraza = ['ZONA DE SERVICIO', 'ZONA SOCIAL'];
   estilosFachada = ['INTROSPECTIVA', 'MODERNA', 'POSMODERNA'];
+  
   form!: FormGroup;
   showMessage = false;
   message = '';
@@ -47,6 +50,9 @@ export class DiagnosticoProyectoComponent implements OnInit {
       floor: ['', Validators.required],
       country: ['', Validators.required],
       address: [''],
+      countryCode: ['+54'],
+      phoneNumber: ['', [Validators.pattern('^[0-9]+$')]],
+      email: ['', Validators.email],
       primerNivel: this.fb.array(this.primerNivel.map(() => this.fb.control(false)), this.minSelectedCheckboxes(1)),
       segundoNivel: this.fb.array(this.segundoNivel.map(() => this.fb.control(false)), this.minSelectedCheckboxesOrOtros(1)),
       segundoNivelMasTerraza: this.fb.array(this.segundoNivelMasTerraza.map(() => this.fb.control(false)), this.minSelectedCheckboxes(1)),
@@ -98,6 +104,14 @@ export class DiagnosticoProyectoComponent implements OnInit {
 
   get address() {
     return this.form.get('address');
+  }
+
+  get phoneNumber() {
+    return this.form.get('phoneNumber');
+  }
+
+  get email() {
+    return this.form.get('email');
   }
 
   get primerNivelControls() {
