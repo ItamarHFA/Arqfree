@@ -9,7 +9,13 @@ import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '
 export class DiagnosticoProyectoComponent implements OnInit {
   currentStep = 1;
   currentQuestion = 1;
-  progressBarWidth: string = '20%';
+  progressBarWidth: string = '0%';
+  steps = [1, 2, 3];
+  completedSteps = 0;
+  totalQuestionsStep1 = 5;
+  totalQuestionsStep2 = 4;
+  totalQuestionsStep3 = 5;
+
   proyectos = ['Unifamiliar', 'Multifamiliar', 'Comercial'];
   pisos: { [key: string]: string[] } = {
     Unifamiliar: ['1 nivel', '2 niveles + terraza', 'Otros'],
@@ -63,10 +69,11 @@ export class DiagnosticoProyectoComponent implements OnInit {
       this.form.get('address')!.updateValueAndValidity();
     });
 
-    // Subscribe to value changes of 'otros' field to revalidate 'segundoNivel' form array
     this.form.get('otros')!.valueChanges.subscribe(() => {
       this.form.get('segundoNivel')!.updateValueAndValidity();
     });
+
+    this.updateProgressBar();
   }
 
   get name() {
@@ -129,9 +136,31 @@ export class DiagnosticoProyectoComponent implements OnInit {
     this.filteredPisos = this.pisos[selectedProjectType];
   }
 
-  onContinue() {
-    console.log('Formulario actual:', this.form.value);
+  updateProgressBar() {
+    let totalQuestions = 0;
     if (this.currentStep === 1) {
+      totalQuestions = this.totalQuestionsStep1;
+    } else if (this.currentStep === 2) {
+      totalQuestions = this.totalQuestionsStep2;
+    }
+
+    const totalProgressSteps = this.steps.length - 1;
+    const stepProgress = (this.currentQuestion / totalQuestions) * (100 / totalProgressSteps);
+
+    if (this.currentStep === 1) {
+      this.progressBarWidth = `${stepProgress}%`;
+    } else if (this.currentStep === 2) {
+      this.progressBarWidth = `${(100 / totalProgressSteps) + stepProgress}%`;
+    } else if (this.currentStep === 3) {
+      this.progressBarWidth = `100%`;
+    }
+
+    this.completedSteps = Math.floor(parseFloat(this.progressBarWidth) / (100 / totalProgressSteps)) + 1;
+  }
+
+  onContinue() {
+    if (this.currentStep === 1) {
+      // Validaciones para el paso 1
       if (this.currentQuestion === 1 && this.name?.invalid) {
         this.name.markAsTouched();
       } else if (this.currentQuestion === 2 && this.projectType?.invalid) {
@@ -143,23 +172,22 @@ export class DiagnosticoProyectoComponent implements OnInit {
       } else if (this.currentQuestion === 5 && this.country?.invalid) {
         this.country.markAsTouched();
       } else {
-        console.log("Formulario enviado");
-        if (this.currentQuestion < 5) {
+        // Avanzar pregunta
+        if (this.currentQuestion < this.totalQuestionsStep1) {
           this.currentQuestion++;
-          this.progressBarWidth = `${this.currentQuestion * 20}%`;
-          console.log("Pregunta actual:", this.currentQuestion);
-        } else if (this.currentQuestion === 5) {
+        } else if (this.currentQuestion === this.totalQuestionsStep1) {
           this.showMessage = true;
           this.message = '¡GENIAL! HAZ CULMINADO EL PASO 1\nCONTINUEMOS CON EL PASO 2';
           setTimeout(() => {
             this.showMessage = false;
             this.currentStep = 2;
             this.currentQuestion = 1;
-            this.progressBarWidth = '20%';
+            this.updateProgressBar();
           }, 5000);
         }
       }
     } else if (this.currentStep === 2) {
+      // Validaciones para el paso 2
       if (this.currentQuestion === 1 && this.form.get('primerNivel')!.invalid) {
         this.form.get('primerNivel')!.markAllAsTouched();
       } else if (this.currentQuestion === 2 && this.form.get('segundoNivel')!.invalid) {
@@ -170,19 +198,17 @@ export class DiagnosticoProyectoComponent implements OnInit {
       } else if (this.currentQuestion === 4 && this.form.get('estiloFachada')!.invalid) {
         this.form.get('estiloFachada')!.markAsTouched();
       } else {
-        console.log("Formulario enviado");
-        if (this.currentQuestion < 4) {
+        // Avanzar pregunta
+        if (this.currentQuestion < this.totalQuestionsStep2) {
           this.currentQuestion++;
-          this.progressBarWidth = `${(this.currentQuestion + 4) * 20}%`;
-          console.log("Pregunta actual:", this.currentQuestion);
-        } else if (this.currentQuestion === 4) {
+        } else if (this.currentQuestion === this.totalQuestionsStep2) {
           this.showMessage = true;
           this.message = '¡ESTUPENDO! CONTINUEMOS CON EL PASO 3';
           setTimeout(() => {
             this.showMessage = false;
             this.currentStep = 3;
             this.currentQuestion = 1;
-            this.progressBarWidth = '20%';
+            this.updateProgressBar();
           }, 5000);
         }
       }
@@ -201,7 +227,6 @@ export class DiagnosticoProyectoComponent implements OnInit {
       } else if (this.form.get('referenciaVivienda')!.invalid) {
         this.form.get('referenciaVivienda')!.markAsTouched();
       } else {
-        console.log("Formulario enviado");
         this.showMessage = true;
         this.message = '¡PERFECTO! GRACIAS POR BRINDARNOS TU INFORMACIÓN.\n\nAHORA SÍ DESCARGA EL PDF';
         setTimeout(() => {
@@ -210,30 +235,30 @@ export class DiagnosticoProyectoComponent implements OnInit {
         }, 5000);
       }
     }
+
+    this.updateProgressBar();
   }
 
   onBack() {
     if (this.currentStep === 2 && this.currentQuestion === 1) {
       this.currentStep = 1;
-      this.currentQuestion = 5;
-      this.progressBarWidth = '100%';
+      this.currentQuestion = this.totalQuestionsStep1;
     } else if (this.currentStep === 3 && this.currentQuestion === 1) {
       this.currentStep = 2;
-      this.currentQuestion = 4;
-      this.progressBarWidth = '80%';
+      this.currentQuestion = this.totalQuestionsStep2;
     } else if (this.currentQuestion > 1) {
       this.currentQuestion--;
-      this.progressBarWidth = `${this.currentQuestion * 20}%`;
     }
-    console.log("Pregunta actual:", this.currentQuestion);
+    this.updateProgressBar();
   }
 
   resetForm() {
     this.form.reset({
-      country: '' // Establecer el valor inicial del país en vacío
+      country: ''
     });
     this.currentStep = 1;
     this.currentQuestion = 1;
-    this.progressBarWidth = '20%';
+    this.progressBarWidth = '0%';
+    this.updateProgressBar();
   }
 }
