@@ -177,7 +177,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
           this.currentQuestion++;
         } else if (this.currentQuestion === this.totalQuestionsStep1) {
           this.showMessage = true;
-          this.message = '¡Genial! Haz culminado el paso 1';
+          this.message = 'Sigamos';
           setTimeout(() => {
             this.showMessage = false;
             this.currentStep = 2;
@@ -203,7 +203,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
           this.currentQuestion++;
         } else if (this.currentQuestion === this.totalQuestionsStep2) {
           this.showMessage = true;
-          this.message = 'Continuemos con el paso 3';
+          this.message = 'Continuemos';
           setTimeout(() => {
             this.showMessage = false;
             this.currentStep = 3;
@@ -228,7 +228,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
         this.form.get('referenciaVivienda')!.markAsTouched();
       } else {
         this.showMessage = true;
-        this.message = '¡Perfecto! Gracias por brindarnos tu información.\n\nAhora sí descarga tu pdf';
+        this.message = 'Finalizamos.\n\nAhora sí descarga tu pdf';
         setTimeout(() => {
           this.showMessage = false;
           this.resetForm(); // Resetear el formulario al estado inicial
