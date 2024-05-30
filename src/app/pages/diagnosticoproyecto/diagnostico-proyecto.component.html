@@ -2,10 +2,10 @@
   <div class="text-center py-4">
     <h1 class="text-4xl font-bold text-gray-700 mb-2">DIAGNÓSTICO DEL PROYECTO</h1>
     <div class="my-4">
-      <p *ngIf="currentStep === 1" class="text-gray-600 mb-2">A través de este formulario lograremos asesorarte mejor</p>
-      <h2 *ngIf="currentStep === 2" class="text-2xl font-bold text-gray-700 mb-4">CUADRO DE NECESIDADES</h2>
+      <p *ngIf="currentStep === 1" class="text-gray-600 mb-2">Comprendemos tus necesidades, y asesorarte mejor</p>
+      
       <p *ngIf="currentStep === 2" class="text-gray-600 mb-2">Ahora sí! iniciemos con el diagnóstico</p>
-      <h2 *ngIf="currentStep === 3" class="text-2xl font-bold text-gray-700 mb-4">DATOS INTEGRALES</h2>
+      
       <p *ngIf="currentStep === 3" class="text-gray-600 mb-2">Ahora conozcamos un poco más sobre tu vivienda</p>
 
       <div class="w-3/4 mx-auto text-center relative">
@@ -26,6 +26,9 @@
 
   <div class="flex items-center justify-center mt-1 mb-5">
     <div class="relative z-10 p-10 bg-white shadow-lg rounded-3xl border border-gray-300 max-w-3xl w-full">
+          <h2 *ngIf="currentStep === 1" class="text-2xl font-bold mb-4" style="color: #95C11F;">DATOS ADICIONALES</h2>
+          <h2 *ngIf="currentStep === 2" class="text-2xl font-bold mb-4" style="color: #95C11F;">CUADRO DE NECESIDADES</h2>
+          <h2 *ngIf="currentStep === 3" class="text-2xl font-bold mb-4" style="color: #95C11F;">DATOS INTEGRALES</h2>
       <form [formGroup]="form" (ngSubmit)="onContinue()">
         <!-- Questions for Step 1 -->
         <ng-container *ngIf="currentStep === 1 && currentQuestion === 1">
@@ -137,78 +140,74 @@
             </div>
           </div>
         </ng-container>
-  <!-- Questions for Step 2 -->
-        
-        
-          <ng-container *ngIf="currentStep === 2 && currentQuestion === 1">
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2">
-                1 → PRIMER NIVEL (PUEDE ELEGIR UNA O MÁS OPCIONES)
-              </label>
-              <div [formArrayName]="'primerNivel'">
-                <div *ngFor="let nivel of primerNivel; let i = index">
-                  <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
-                  <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
-                </div>
+        <!-- Questions for Step 2 -->
+        <ng-container *ngIf="currentStep === 2 && currentQuestion === 1">
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">
+              1 → PRIMER NIVEL (PUEDE ELEGIR UNA O MÁS OPCIONES)
+            </label>
+            <div [formArrayName]="'primerNivel'">
+              <div *ngFor="let nivel of primerNivel; let i = index">
+                <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
+                <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
               </div>
-              <div *ngIf="form.get('primerNivel')?.touched && form.get('primerNivel')?.errors?.['required']"
-                class="text-red-500 text-sm mt-2">Debes seleccionar al menos una opción.</div>
             </div>
-          </ng-container>
-          <ng-container *ngIf="currentStep === 2 && currentQuestion === 2">
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2">
-                2 → SEGUNDO NIVEL (PUEDE ELEGIR UNA O MÁS OPCIONES)
-              </label>
-              <div [formArrayName]="'segundoNivel'">
-                <div *ngFor="let nivel of segundoNivel; let i = index">
-                  <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
-                  <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
-                </div>
+            <div *ngIf="form.get('primerNivel')?.touched && form.get('primerNivel')?.errors?.['required']"
+              class="text-red-500 text-sm mt-2">Debes seleccionar al menos una opción.</div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="currentStep === 2 && currentQuestion === 2">
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">
+              2 → SEGUNDO NIVEL (PUEDE ELEGIR UNA O MÁS OPCIONES)
+            </label>
+            <div [formArrayName]="'segundoNivel'">
+              <div *ngFor="let nivel of segundoNivel; let i = index">
+                <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
+                <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
               </div>
-              <div class="mt-4">
-                <label for="otros" class="block text-gray-700 text-sm font-bold mb-2">Otros:</label>
-                <input id="otros" formControlName="otros" type="text" placeholder="Especifique otros"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-              </div>
-              <div *ngIf="form.get('segundoNivel')?.touched && form.get('segundoNivel')?.errors?.['required']"
-                class="text-red-500 text-sm mt-2">Debes seleccionar al menos una opción o completar la casilla de otros.</div>
             </div>
-          </ng-container>
-          <ng-container *ngIf="currentStep === 2 && currentQuestion === 3">
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2">
-                3 → SEGUNDO NIVEL + TERRAZA (PUEDE ELEGIR UNA O MÁS OPCIONES)
-              </label>
-              <div [formArrayName]="'segundoNivelMasTerraza'">
-                <div *ngFor="let nivel of segundoNivelMasTerraza; let i = index">
-                  <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
-                  <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
-                </div>
-              </div>
-              <div *ngIf="form.get('segundoNivelMasTerraza')?.touched && form.get('segundoNivelMasTerraza')?.errors?.['required']"
-                class="text-red-500 text-sm mt-2">Debes seleccionar al menos una opción.</div>
+            <div class="mt-4">
+              <label for="otros" class="block text-gray-700 text-sm font-bold mb-2">Otros:</label>
+              <input id="otros" formControlName="otros" type="text" placeholder="Especifique otros"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
-          </ng-container>
-          <ng-container *ngIf="currentStep === 2 && currentQuestion === 4">
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2">
-                4 → ESTILO DE FACHADA
-              </label>
-              <div>
-                <div *ngFor="let estilo of estilosFachada">
-                  <input type="radio" id="{{estilo}}" formControlName="estiloFachada" [value]="estilo" class="mr-2 leading-tight">
-                  <label for="{{estilo}}" class="text-gray-700">{{ estilo }}</label>
-                </div>
+            <div *ngIf="form.get('segundoNivel')?.touched && form.get('segundoNivel')?.errors?.['required']"
+              class="text-red-500 text-sm mt-2">Debes seleccionar al menos una opción o completar la casilla de otros.</div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="currentStep === 2 && currentQuestion === 3">
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">
+              3 → SEGUNDO NIVEL + TERRAZA (PUEDE ELEGIR UNA O MÁS OPCIONES)
+            </label>
+            <div [formArrayName]="'segundoNivelMasTerraza'">
+              <div *ngFor="let nivel of segundoNivelMasTerraza; let i = index">
+                <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
+                <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
               </div>
-              <div *ngIf="form.get('estiloFachada')?.touched && form.get('estiloFachada')?.errors?.['required']"
-                class="text-red-500 text-sm mt-2">Debes seleccionar un estilo de fachada.</div>
             </div>
-          </ng-container>
-        
-
+            <div *ngIf="form.get('segundoNivelMasTerraza')?.touched && form.get('segundoNivelMasTerraza')?.errors?.['required']"
+              class="text-red-500 text-sm mt-2">Debes seleccionar al menos una opción.</div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="currentStep === 2 && currentQuestion === 4">
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">
+              4 → ESTILO DE FACHADA
+            </label>
+            <div>
+              <div *ngFor="let estilo of estilosFachada">
+                <input type="radio" id="{{estilo}}" formControlName="estiloFachada" [value]="estilo" class="mr-2 leading-tight">
+                <label for="{{estilo}}" class="text-gray-700">{{ estilo }}</label>
+              </div>
+            </div>
+            <div *ngIf="form.get('estiloFachada')?.touched && form.get('estiloFachada')?.errors?.['required']"
+              class="text-red-500 text-sm mt-2">Debes seleccionar un estilo de fachada.</div>
+          </div>
+        </ng-container>
+        <!-- Questions for Step 3 -->
         <ng-container *ngIf="currentStep === 3">
-          <!-- Questions for Step 3 -->
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div>
               <label for="numIntegrantes" class="block text-gray-700 text-sm font-bold mb-2">
@@ -315,5 +314,5 @@
       <span class="text-lg font-bold mr-2">{{ message }}</span>
       <button class="text-white" (click)="closeMessage()">✕</button>
     </div>
-  </div>
+  </div>
 </div>
