@@ -1,11 +1,11 @@
 <div class="min-h-screen bg-gradient-construction">
   <div class="text-center py-4">
-    <h1 class="text-4xl font-bold text-gray-700 mb-2">DIAGNÓSTICO DEL PROYECTO</h1>
+    <h1 class="text-xl font-bold text-gray-700 mb-2">DIAGNÓSTICO DEL PROYECTO</h1>
     <div class="my-4">
-      <p *ngIf="currentStep === 1" class="text-gray-600 mb-2">Comprendemos tus necesidades, y asesorarte mejor</p>
-      
+      <p *ngIf="currentStep === 1" class="text-gray-600 mb-2">Comprendemos tus necesidades, y estamos para asesorarte mejor.</p>
+
       <p *ngIf="currentStep === 2" class="text-gray-600 mb-2">Ahora sí! iniciemos con el diagnóstico</p>
-      
+
       <p *ngIf="currentStep === 3" class="text-gray-600 mb-2">Ahora conozcamos un poco más sobre tu vivienda</p>
 
       <div class="w-3/4 mx-auto text-center relative">
@@ -13,7 +13,8 @@
           <div *ngFor="let step of steps; let i = index" class="relative z-10">
             <div class="flex items-center justify-center w-10 h-10 rounded-full bg-white border-2"
               [class.border-lime-500]="i < completedSteps" [class.border-gray-300]="i >= completedSteps">
-              <span [class.text-lime-500]="i < completedSteps" [class.text-gray-400]="i >= completedSteps">{{ step }}</span>
+              <span [class.text-lime-500]="i < completedSteps" [class.text-gray-400]="i >= completedSteps">{{ step
+                }}</span>
             </div>
           </div>
         </div>
@@ -26,9 +27,9 @@
 
   <div class="flex items-center justify-center mt-1 mb-5">
     <div class="relative z-10 p-10 bg-white shadow-lg rounded-3xl border border-gray-300 max-w-3xl w-full">
-          <h2 *ngIf="currentStep === 1" class="text-2xl font-bold mb-4" style="color: #95C11F;">DATOS ADICIONALES</h2>
-          <h2 *ngIf="currentStep === 2" class="text-2xl font-bold mb-4" style="color: #95C11F;">CUADRO DE NECESIDADES</h2>
-          <h2 *ngIf="currentStep === 3" class="text-2xl font-bold mb-4" style="color: #95C11F;">DATOS INTEGRALES</h2>
+      <h2 *ngIf="currentStep === 1" class="text-2xl font-bold mb-4" style="color: #95C11F;">DATOS ADICIONALES</h2>
+      <h2 *ngIf="currentStep === 2" class="text-2xl font-bold mb-4" style="color: #95C11F;">CUADRO DE NECESIDADES</h2>
+      <h2 *ngIf="currentStep === 3" class="text-2xl font-bold mb-4" style="color: #95C11F;">DATOS INTEGRALES</h2>
       <form [formGroup]="form" (ngSubmit)="onContinue()">
         <!-- Questions for Step 1 -->
         <ng-container *ngIf="currentStep === 1 && currentQuestion === 1">
@@ -54,10 +55,12 @@
                 class="shadow appearance-none border rounded-l w-1/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 <option *ngFor="let code of countryCodes" [value]="code">{{ code }}</option>
               </select>
-              <input id="phoneNumber" formControlName="phoneNumber" name="phoneNumber" type="text" placeholder="Tu número"
+              <input id="phoneNumber" formControlName="phoneNumber" name="phoneNumber" type="text"
+                placeholder="Tu número"
                 class="shadow appearance-none border-t border-r border-b rounded-r w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
-            <div *ngIf="phoneNumber?.invalid && (phoneNumber?.dirty || phoneNumber?.touched)" class="text-red-500 text-sm mt-2">
+            <div *ngIf="phoneNumber?.invalid && (phoneNumber?.dirty || phoneNumber?.touched)"
+              class="text-red-500 text-sm mt-2">
               <div *ngIf="phoneNumber?.errors?.['pattern']">Solo permite números.</div>
             </div>
           </div>
@@ -67,7 +70,8 @@
             <label for="email" class="block text-gray-700 text-sm font-bold mb-2">
               3 → CORREO
             </label>
-            <input id="email" formControlName="email" name="email" type="email" placeholder="Tu correo" autocomplete="email"
+            <input id="email" formControlName="email" name="email" type="email" placeholder="Tu correo"
+              autocomplete="email"
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
           </div>
         </ng-container>
@@ -84,7 +88,8 @@
                   class="mr-2 leading-tight" (change)="onProjectTypeChange()">
                 <label for="{{proyecto}}" class="text-gray-700">{{ proyecto }}</label>
               </div>
-              <div *ngIf="projectType?.invalid && (projectType?.dirty || projectType?.touched)" class="text-red-500 text-sm mt-2">
+              <div *ngIf="projectType?.invalid && (projectType?.dirty || projectType?.touched)"
+                class="text-red-500 text-sm mt-2">
                 <div *ngIf="projectType?.errors?.['required']">Debes seleccionar un tipo de proyecto.</div>
               </div>
             </div>
@@ -103,6 +108,21 @@
           </div>
 
           <div class="mb-4">
+            <label for="floor" class="block text-gray-700 text-sm font-bold mb-2">
+              6 → PISOS
+            </label>
+            <div>
+              <div *ngFor="let piso of filteredPisos">
+                <input type="radio" id="{{piso}}" formControlName="floor" [value]="piso" class="mr-2 leading-tight">
+                <label for="{{piso}}" class="text-gray-700">{{ piso }}</label>
+              </div>
+              <div *ngIf="floor?.invalid && (floor?.dirty || floor?.touched)" class="text-red-500 text-sm mt-2">
+                <div *ngIf="floor?.errors?.['required']">Debes seleccionar Piso.</div>
+              </div>
+            </div>
+          </div>
+
+          <!--<div class="mb-4">
             <label for="country" class="block text-gray-700 text-sm font-bold mb-2">
               6 → PAÍS
             </label>
@@ -121,25 +141,12 @@
                 <div *ngIf="country?.errors?.['required']">Debes seleccionar un País.</div>
               </div>
             </div>
-          </div>
+          </div>-->
         </ng-container>
 
-        <ng-container *ngIf="currentStep === 1 && currentQuestion === 3">
-          <div class="mb-4">
-            <label for="floor" class="block text-gray-700 text-sm font-bold mb-2">
-              7 → PISOS
-            </label>
-            <div>
-              <div *ngFor="let piso of filteredPisos">
-                <input type="radio" id="{{piso}}" formControlName="floor" [value]="piso" class="mr-2 leading-tight">
-                <label for="{{piso}}" class="text-gray-700">{{ piso }}</label>
-              </div>
-              <div *ngIf="floor?.invalid && (floor?.dirty || floor?.touched)" class="text-red-500 text-sm mt-2">
-                <div *ngIf="floor?.errors?.['required']">Debes seleccionar Piso.</div>
-              </div>
-            </div>
-          </div>
-        </ng-container>
+      <!--<ng-container *ngIf="currentStep === 1 && currentQuestion === 3">
+          
+        </ng-container>-->
         <!-- Questions for Step 2 -->
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 1">
           <div class="mb-4">
@@ -173,7 +180,8 @@
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
             <div *ngIf="form.get('segundoNivel')?.touched && form.get('segundoNivel')?.errors?.['required']"
-              class="text-red-500 text-sm mt-2">Debes seleccionar al menos una opción o completar la casilla de otros.</div>
+              class="text-red-500 text-sm mt-2">Debes seleccionar al menos una opción o completar la casilla de otros.
+            </div>
           </div>
         </ng-container>
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 3">
@@ -187,7 +195,8 @@
                 <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
               </div>
             </div>
-            <div *ngIf="form.get('segundoNivelMasTerraza')?.touched && form.get('segundoNivelMasTerraza')?.errors?.['required']"
+            <div
+              *ngIf="form.get('segundoNivelMasTerraza')?.touched && form.get('segundoNivelMasTerraza')?.errors?.['required']"
               class="text-red-500 text-sm mt-2">Debes seleccionar al menos una opción.</div>
           </div>
         </ng-container>
@@ -198,7 +207,8 @@
             </label>
             <div>
               <div *ngFor="let estilo of estilosFachada">
-                <input type="radio" id="{{estilo}}" formControlName="estiloFachada" [value]="estilo" class="mr-2 leading-tight">
+                <input type="radio" id="{{estilo}}" formControlName="estiloFachada" [value]="estilo"
+                  class="mr-2 leading-tight">
                 <label for="{{estilo}}" class="text-gray-700">{{ estilo }}</label>
               </div>
             </div>
@@ -219,7 +229,8 @@
               <div *ngIf="form.get('numIntegrantes')?.invalid && form.get('numIntegrantes')?.touched"
                 class="text-red-500 text-sm mt-2">
                 <div *ngIf="form.get('numIntegrantes')?.errors?.['required']">Número de integrantes es requerido.</div>
-                <div *ngIf="form.get('numIntegrantes')?.errors?.['min']">Número de integrantes no puede ser negativo.</div>
+                <div *ngIf="form.get('numIntegrantes')?.errors?.['min']">Número de integrantes no puede ser negativo.
+                </div>
               </div>
             </div>
             <div>
@@ -242,11 +253,13 @@
               </label>
               <div class="flex items-center space-x-4">
                 <div>
-                  <input type="radio" id="mascotasSi" formControlName="numMascotas" value="Sí" class="mr-2 leading-tight">
+                  <input type="radio" id="mascotasSi" formControlName="numMascotas" value="Sí"
+                    class="mr-2 leading-tight">
                   <label for="mascotasSi" class="text-gray-700">Sí</label>
                 </div>
                 <div>
-                  <input type="radio" id="mascotasNo" formControlName="numMascotas" value="No" class="mr-2 leading-tight">
+                  <input type="radio" id="mascotasNo" formControlName="numMascotas" value="No"
+                    class="mr-2 leading-tight">
                   <label for="mascotasNo" class="text-gray-700">No</label>
                 </div>
               </div>
@@ -290,7 +303,8 @@
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               <div *ngIf="form.get('referenciaVivienda')?.invalid && form.get('referenciaVivienda')?.touched"
                 class="text-red-500 text-sm mt-2">
-                <div *ngIf="form.get('referenciaVivienda')?.errors?.['required']">Referencia de vivienda es requerido.</div>
+                <div *ngIf="form.get('referenciaVivienda')?.errors?.['required']">Referencia de vivienda es requerido.
+                </div>
               </div>
             </div>
           </div>
@@ -298,12 +312,13 @@
 
         <!-- Botones de navegación -->
         <div class="flex items-center justify-between">
-          <button
-            class="bg-lime-500 hover:bg-lime-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
-            type="submit">CONTINUAR</button>
+
           <button *ngIf="currentQuestion > 1 || currentStep > 1"
-            class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
+            class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-4"
             type="button" (click)="onBack()">REGRESAR</button>
+          <button
+            class="bg-lime-500 hover:bg-lime-600 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-4"
+            type="submit">CONTINUAR</button>
         </div>
       </form>
     </div>

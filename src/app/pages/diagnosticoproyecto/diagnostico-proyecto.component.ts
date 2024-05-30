@@ -12,23 +12,23 @@ export class DiagnosticoProyectoComponent implements OnInit {
   progressBarWidth: string = '0%';
   steps = [1, 2, 3];
   completedSteps = 0;
-  totalQuestionsStep1 = 3;
+  totalQuestionsStep1 = 2;
   totalQuestionsStep2 = 4;
   totalQuestionsStep3 = 5;
 
   proyectos = ['Unifamiliar', 'Multifamiliar', 'Comercial'];
   pisos: { [key: string]: string[] } = {
-    Unifamiliar: ['1 nivel', '2 niveles + terraza', 'Otros'],
-    Multifamiliar: ['1 nivel', '2 niveles + terraza', '3 a más'],
-    Comercial: ['1 nivel', '2 niveles + terraza', '3 niveles a más']
+    Unifamiliar: ['1 nivel', '2 niveles', 'Otros'],
+    Multifamiliar: ['1 nivel', '2 niveles', '3 niveles a más'],
+    Comercial: ['1 nivel', '2 niveles', '3 niveles a más']
   };
   filteredPisos: string[] = [];
-  paises = [
+  /*paises = [
     'Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 'Ecuador', 'Guyana', 'Paraguay', 'Perú', 'Surinam', 'Uruguay', 'Venezuela',
     'Alemania', 'España', 'Francia', 'Italia', 'Reino Unido', 'Portugal', 'Rusia', 'Países Bajos', 'Bélgica', 'Suiza',
     'Nigeria', 'Sudáfrica', 'Egipto', 'Argelia', 'Etiopía', 'Ghana', 'Kenia', 'Uganda', 'Angola', 'Mozambique',
     'Estados Unidos', 'Canadá', 'México'
-  ];
+  ];*/
   countryCodes = ['+54', '+591', '+55', '+56', '+57', '+593', '+592', '+595', '+51', '+597', '+598', '+58', '+49', '+34', '+33', '+39', '+44', '+351', '+7', '+31', '+32', '+41', '+234', '+27', '+20', '+213', '+251', '+233', '+254', '+256', '+244', '+258', '+1', '+52'];
   
   primerNivel = ['COMEDOR', 'BAÑO DE VISITA', 'ESTACIONAMIENTO', 'ESTUDIO', 'SALA', 'COCINA', 'DORMITORIO', 'TERRAZA'];
@@ -48,7 +48,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
       projectType: ['', Validators.required],
       area: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9 ]+$')]],
       floor: ['', Validators.required],
-      country: ['', Validators.required],
+      //country: ['', Validators.required],
       address: [''],
       countryCode: ['+54'],
       phoneNumber: ['', [Validators.pattern('^[0-9]+$')]],
@@ -66,14 +66,14 @@ export class DiagnosticoProyectoComponent implements OnInit {
       referenciaVivienda: ['', Validators.required]
     });
 
-    this.form.get('country')!.valueChanges.subscribe(value => {
+    /*this.form.get('country')!.valueChanges.subscribe(value => {
       if (value === 'Perú') {
         this.form.get('address')!.setValidators([Validators.required, Validators.pattern('^[A-Za-z ]+$')]);
       } else {
         this.form.get('address')!.clearValidators();
       }
       this.form.get('address')!.updateValueAndValidity();
-    });
+    });*/
 
     this.form.get('otros')!.valueChanges.subscribe(() => {
       this.form.get('segundoNivel')!.updateValueAndValidity();
@@ -98,9 +98,9 @@ export class DiagnosticoProyectoComponent implements OnInit {
     return this.form.get('floor');
   }
 
-  get country() {
+  /*get country() {
     return this.form.get('country');
-  }
+  }*/
 
   get address() {
     return this.form.get('address');
@@ -181,9 +181,9 @@ export class DiagnosticoProyectoComponent implements OnInit {
         this.projectType.markAsTouched();
       } else if (this.currentQuestion === 2 && this.area?.invalid) {
         this.area.markAllAsTouched();
-      } else if (this.currentQuestion === 2 && this.country?.invalid) {
+      } /*else if (this.currentQuestion === 2 && this.country?.invalid) {
         this.country.markAsTouched();
-      } else if (this.currentQuestion === 3 && this.floor?.invalid) {
+      }*/ else if (this.currentQuestion === 2 && this.floor?.invalid) {
         this.floor.markAsTouched();
       }  else {
         // Avanzar pregunta
