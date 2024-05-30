@@ -12,7 +12,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
   progressBarWidth: string = '0%';
   steps = [1, 2, 3];
   completedSteps = 0;
-  totalQuestionsStep1 = 5;
+  totalQuestionsStep1 = 3;
   totalQuestionsStep2 = 4;
   totalQuestionsStep3 = 5;
 
@@ -179,13 +179,13 @@ export class DiagnosticoProyectoComponent implements OnInit {
         this.name.markAsTouched();
       } else if (this.currentQuestion === 2 && this.projectType?.invalid) {
         this.projectType.markAsTouched();
-      } else if (this.currentQuestion === 3 && this.area?.invalid) {
+      } else if (this.currentQuestion === 2 && this.area?.invalid) {
         this.area.markAllAsTouched();
-      } else if (this.currentQuestion === 4 && this.floor?.invalid) {
-        this.floor.markAsTouched();
-      } else if (this.currentQuestion === 5 && this.country?.invalid) {
+      } else if (this.currentQuestion === 2 && this.country?.invalid) {
         this.country.markAsTouched();
-      } else {
+      } else if (this.currentQuestion === 3 && this.floor?.invalid) {
+        this.floor.markAsTouched();
+      }  else {
         // Avanzar pregunta
         if (this.currentQuestion < this.totalQuestionsStep1) {
           this.currentQuestion++;
