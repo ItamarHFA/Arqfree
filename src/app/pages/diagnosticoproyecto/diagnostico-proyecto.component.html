@@ -13,8 +13,7 @@
           <div *ngFor="let step of steps; let i = index" class="relative z-10">
             <div class="flex items-center justify-center w-10 h-10 rounded-full bg-white border-2"
               [class.border-lime-500]="i < completedSteps" [class.border-gray-300]="i >= completedSteps">
-              <span [class.text-lime-500]="i < completedSteps" [class.text-gray-400]="i >= completedSteps">{{ step
-                }}</span>
+              <span [class.text-lime-500]="i < completedSteps" [class.text-gray-400]="i >= completedSteps">✔️</span>
             </div>
           </div>
         </div>
