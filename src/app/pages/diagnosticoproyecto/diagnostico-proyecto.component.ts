@@ -31,9 +31,9 @@ export class DiagnosticoProyectoComponent implements OnInit {
   ];*/
   countryCodes = ['+54', '+591', '+55', '+56', '+57', '+593', '+592', '+595', '+51', '+597', '+598', '+58', '+49', '+34', '+33', '+39', '+44', '+351', '+7', '+31', '+32', '+41', '+234', '+27', '+20', '+213', '+251', '+233', '+254', '+256', '+244', '+258', '+1', '+52'];
   
-  primerNivel = ['COMEDOR', 'BAÑO DE VISITA', 'ESTACIONAMIENTO', 'ESTUDIO', 'SALA', 'COCINA', 'DORMITORIO', 'TERRAZA'];
-  segundoNivel = ['DORMITORIO PRINCIPAL', 'DORMITORIO SECUNDARIO', 'ZONA DE STAR'];
-  segundoNivelMasTerraza = ['ZONA DE SERVICIO', 'ZONA SOCIAL'];
+  primerNivel = ['COCHERA', 'ESTUDIO', 'BAÑO DE VISITA', 'SALA', 'COCINA / DISPENSADOR / ISLA', 'COMEDOR', 'DORMITORIO', 'TERRAZA / TERRAZA', 'PISCINA'];
+  segundoNivel = ['WALKING CLOSET + BAÑO', 'DORMITORIO PRINCIPAL', 'DORMITORIOS SECUNDARIOS', 'SERVICIOS HIGIENICOS', 'ZONA DE STAR', 'BIBLIOTECA'];
+  segundoNivelMasTerraza = ['ZONA DE SERVICIO', 'ZONA SOCIAL / PARRILLA', 'LAVANDERIA', 'GYMNSAIO', 'JACUZZI'];
   estilosFachada = ['INTROSPECTIVA', 'MODERNA', 'POSMODERNA'];
   
   form!: FormGroup;

@@ -205,7 +205,7 @@
                 N° INTEGRANTES
               </label>
               <input id="numIntegrantes" formControlName="numIntegrantes" name="numIntegrantes" type="number"
-                placeholder="Número de integrantes" min="0"
+                placeholder="Miembros de su familia" min="0"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               <div *ngIf="form.get('numIntegrantes')?.invalid && form.get('numIntegrantes')?.touched"
                 class="text-red-500 text-sm mt-2">
@@ -219,7 +219,7 @@
                 COLORES FAVORITOS
               </label>
               <input id="coloresFavoritos" formControlName="coloresFavoritos" name="coloresFavoritos" type="text"
-                placeholder="Colores favoritos"
+                placeholder="Colores o texturas"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               <div *ngIf="form.get('coloresFavoritos')?.invalid && form.get('coloresFavoritos')?.touched"
                 class="text-red-500 text-sm mt-2">
@@ -280,7 +280,7 @@
                 REFERENCIA DE VIVIENDA
               </label>
               <input id="referenciaVivienda" formControlName="referenciaVivienda" name="referenciaVivienda" type="text"
-                placeholder="Referencia de vivienda"
+                placeholder="Nombre de un proyecto favorito"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               <div *ngIf="form.get('referenciaVivienda')?.invalid && form.get('referenciaVivienda')?.touched"
                 class="text-red-500 text-sm mt-2">
@@ -311,4 +311,4 @@
       <button class="text-white" (click)="closeMessage()">✕</button>
     </div>
   </div>
-</div>
+</div>|
