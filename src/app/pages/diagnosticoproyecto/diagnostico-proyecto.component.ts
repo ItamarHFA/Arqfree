@@ -53,9 +53,9 @@ export class DiagnosticoProyectoComponent implements OnInit {
       countryCode: ['+54'],
       phoneNumber: ['', [Validators.pattern('^[0-9]+$')]],
       email: ['', Validators.email],
-      primerNivel: this.fb.array(this.primerNivel.map(() => this.fb.control(false)), this.minSelectedCheckboxes(1)),
+      primerNivel: this.fb.array(this.primerNivel.map(() => this.fb.control(false)), this.minSelectedCheckboxesOrOtros(1)),
       segundoNivel: this.fb.array(this.segundoNivel.map(() => this.fb.control(false)), this.minSelectedCheckboxesOrOtros(1)),
-      segundoNivelMasTerraza: this.fb.array(this.segundoNivelMasTerraza.map(() => this.fb.control(false)), this.minSelectedCheckboxes(1)),
+      segundoNivelMasTerraza: this.fb.array(this.segundoNivelMasTerraza.map(() => this.fb.control(false)), this.minSelectedCheckboxesOrOtros(1)),
       otros: [''],
       estiloFachada: ['', Validators.required],
       numIntegrantes: ['', [Validators.required, Validators.min(0)]],
@@ -126,14 +126,15 @@ export class DiagnosticoProyectoComponent implements OnInit {
     return (this.form.get('segundoNivelMasTerraza') as FormArray).controls;
   }
 
-  minSelectedCheckboxes(min: number) {
+  /*minSelectedCheckboxes(min: number) {
     return (formArray: AbstractControl) => {
       const totalSelected = (formArray as FormArray).controls
         .map(control => control.value)
         .reduce((prev, next) => next ? prev + 1 : prev, 0);
-      return totalSelected >= min ? null : { required: true };
+        const otrosValue = this.form?.get('otros')?.value;
+      return totalSelected >= min || (otrosValue && otrosValue.trim() !== '') ? null : { required: true };
     };
-  }
+  }*/
 
   minSelectedCheckboxesOrOtros(min: number) {
     return (formArray: AbstractControl) => {
