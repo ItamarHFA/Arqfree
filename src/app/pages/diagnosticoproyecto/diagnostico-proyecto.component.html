@@ -2,11 +2,11 @@
   <div class="text-center py-4">
     <h1 class="text-xl font-bold text-gray-700 mb-2">DIAGNÓSTICO DEL PROYECTO</h1>
     <div class="my-4">
-      <p *ngIf="currentStep === 1" class="text-gray-600 mb-2">Comprendemos tus necesidades, y estamos para asesorarte mejor.</p>
-      <p *ngIf="currentStep === 2" class="text-gray-600 mb-2">Ahora sí! iniciemos con el diagnóstico</p>
-      <p *ngIf="currentStep === 3" class="text-gray-600 mb-2">Ahora conozcamos un poco más sobre tu vivienda</p>
+      <p *ngIf="currentStep === 1" class="text-gray-600 mb-2 text-sm">Comprendemos tus necesidades, y estamos para asesorarte mejor.</p>
+      <p *ngIf="currentStep === 2" class="text-gray-600 mb-2 text-sm">Ahora sí! iniciemos con el diagnóstico</p>
+      <p *ngIf="currentStep === 3" class="text-gray-600 mb-2 text-sm">Ahora conozcamos un poco más sobre tu vivienda</p>
 
-      <div class="w-3/4 mx-auto text-center relative">
+      <div class="w-1/2 mx-auto text-center relative">
         <div class="flex items-center justify-between mb-2 relative z-10">
           <div *ngFor="let step of steps; let i = index" class="relative z-10">
             <div
@@ -28,10 +28,10 @@
   </div>
 
   <div class="flex items-center justify-center mt-1 mb-5">
-    <div class="relative z-10 p-10 bg-white shadow-lg rounded-3xl border border-gray-300 max-w-3xl w-full">
-      <h2 *ngIf="currentStep === 1" class="text-2xl font-bold mb-4" style="color: #95C11F;">DATOS ADICIONALES</h2>
-      <h2 *ngIf="currentStep === 2" class="text-2xl font-bold mb-4" style="color: #95C11F;">CUADRO DE NECESIDADES</h2>
-      <h2 *ngIf="currentStep === 3" class="text-2xl font-bold mb-4" style="color: #95C11F;">DATOS INTEGRALES</h2>
+    <div class="relative z-10 p-10 bg-white shadow-lg rounded-3xl border border-gray-300 max-w-xs w-full">
+      <h2 *ngIf="currentStep === 1" class="text-xl font-bold mb-4" style="color: #95C11F;">DATOS ADICIONALES</h2>
+      <h2 *ngIf="currentStep === 2" class="text-xl font-bold mb-4" style="color: #95C11F;">CUADRO DE NECESIDADES</h2>
+      <h2 *ngIf="currentStep === 3" class="text-xl font-bold mb-4" style="color: #95C11F;">DATOS INTEGRALES</h2>
       <form [formGroup]="form" (ngSubmit)="onContinue()">
         <!-- Questions for Step 1 -->
         <ng-container *ngIf="currentStep === 1 && currentQuestion === 1">
@@ -131,169 +131,169 @@
         <!-- Questions for Step 2 -->
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 1">
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">
+            <label class="block text-gray-700 text-sm font-bold mb-2 text-xs">
               1 → PRIMER NIVEL
             </label>
             <div [formArrayName]="'primerNivel'">
               <div *ngFor="let nivel of primerNivel; let i = index">
                 <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
-                <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
+                <label for="{{nivel}}" class="text-gray-700 text-xs">{{ nivel }}</label>
               </div>
             </div>
             <div class="mt-4">
-              <label for="otros" class="block text-gray-700 text-sm font-bold mb-2">Otros:</label>
+              <label for="otros" class="block text-gray-700 text-sm font-bold mb-2 text-xs">Otros:</label>
               <input id="otros" formControlName="otros" type="text" placeholder="Especifique otros"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
             <div *ngIf="form.get('primerNivel')?.touched && form.get('primerNivel')?.errors?.['required']"
-              class="text-red-500 text-sm mt-2">Debes seleccionar al menos una opción o completar la casilla de otros..</div>
+              class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar al menos una opción o completar la casilla de otros..</div>
           </div>
         </ng-container>
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 2">
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">
+            <label class="block text-gray-700 text-sm font-bold mb-2 text-xs">
               2 → SEGUNDO NIVEL
             </label>
             <div [formArrayName]="'segundoNivel'">
               <div *ngFor="let nivel of segundoNivel; let i = index">
                 <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
-                <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
+                <label for="{{nivel}}" class="text-gray-700 text-xs">{{ nivel }}</label>
               </div>
             </div>
             <div class="mt-4">
-              <label for="otros" class="block text-gray-700 text-sm font-bold mb-2">Otros:</label>
+              <label for="otros" class="block text-gray-700 text-sm font-bold mb-2 text-xs">Otros:</label>
               <input id="otros" formControlName="otros" type="text" placeholder="Especifique otros"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
             <div *ngIf="form.get('segundoNivel')?.touched && form.get('segundoNivel')?.errors?.['required']"
-              class="text-red-500 text-sm mt-2">Debes seleccionar al menos una opción o completar la casilla de otros.
+              class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar al menos una opción o completar la casilla de otros.
             </div>
           </div>
         </ng-container>
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 3">
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">
+            <label class="block text-gray-700 text-sm font-bold mb-2 text-xs">
               3 → TERCER NIVEL
             </label>
             <div [formArrayName]="'segundoNivelMasTerraza'">
               <div *ngFor="let nivel of segundoNivelMasTerraza; let i = index">
                 <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
-                <label for="{{nivel}}" class="text-gray-700">{{ nivel }}</label>
+                <label for="{{nivel}}" class="text-gray-700 text-xs">{{ nivel }}</label>
               </div>
             </div>
             <div class="mt-4">
-              <label for="otros" class="block text-gray-700 text-sm font-bold mb-2">Otros:</label>
+              <label for="otros" class="block text-gray-700 text-sm font-bold mb-2 text-xs">Otros:</label>
               <input id="otros" formControlName="otros" type="text" placeholder="Especifique otros"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
             <div
               *ngIf="form.get('segundoNivelMasTerraza')?.touched && form.get('segundoNivelMasTerraza')?.errors?.['required']"
-              class="text-red-500 text-sm mt-2">Debes seleccionar al menos una opción o completar la casilla de otros..</div>
+              class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar al menos una opción o completar la casilla de otros..</div>
           </div>
         </ng-container>
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 4">
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">
+            <label class="block text-gray-700 text-sm font-bold mb-2 text-xs">
               4 → ESTILO DE FACHADA
             </label>
             <div>
               <div *ngFor="let estilo of estilosFachada">
                 <input type="radio" id="{{estilo}}" formControlName="estiloFachada" [value]="estilo"
                   class="mr-2 leading-tight">
-                <label for="{{estilo}}" class="text-gray-700">{{ estilo }}</label>
+                <label for="{{estilo}}" class="text-gray-700 text-xs">{{ estilo }}</label>
               </div>
             </div>
             <div *ngIf="form.get('estiloFachada')?.touched && form.get('estiloFachada')?.errors?.['required']"
-              class="text-red-500 text-sm mt-2">Debes seleccionar un estilo de fachada.</div>
+              class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar un estilo de fachada.</div>
           </div>
         </ng-container>
         <!-- Questions for Step 3 -->
         <ng-container *ngIf="currentStep === 3">
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label for="numIntegrantes" class="block text-gray-700 text-sm font-bold mb-2">
+              <label for="numIntegrantes" class="block text-gray-700 text-sm font-bold mb-2 text-xs">
                 N° INTEGRANTES
               </label>
               <input id="numIntegrantes" formControlName="numIntegrantes" name="numIntegrantes" type="number"
                 placeholder="Miembros de su familia" min="0"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               <div *ngIf="form.get('numIntegrantes')?.invalid && form.get('numIntegrantes')?.touched"
-                class="text-red-500 text-sm mt-2">
+                class="text-red-500 text-sm mt-2 text-xs">
                 <div *ngIf="form.get('numIntegrantes')?.errors?.['required']">Número de integrantes es requerido.</div>
                 <div *ngIf="form.get('numIntegrantes')?.errors?.['min']">Número de integrantes no puede ser negativo.
                 </div>
               </div>
             </div>
             <div>
-              <label for="coloresFavoritos" class="block text-gray-700 text-sm font-bold mb-2">
+              <label for="coloresFavoritos" class="block text-gray-700 text-sm font-bold mb-2 text-xs">
                 COLORES FAVORITOS
               </label>
               <input id="coloresFavoritos" formControlName="coloresFavoritos" name="coloresFavoritos" type="text"
                 placeholder="Colores o texturas"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               <div *ngIf="form.get('coloresFavoritos')?.invalid && form.get('coloresFavoritos')?.touched"
-                class="text-red-500 text-sm mt-2">
+                class="text-red-500 text-sm mt-2 text-xs">
                 <div *ngIf="form.get('coloresFavoritos')?.errors?.['required']">Colores favoritos es requerido.</div>
               </div>
             </div>
           </div>
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label for="numMascotas" class="block text-gray-700 text-sm font-bold mb-2">
+              <label for="numMascotas" class="block text-gray-700 text-sm font-bold mb-2 text-xs">
                 MASCOTAS
               </label>
               <div class="flex items-center space-x-4">
                 <div>
                   <input type="radio" id="mascotasSi" formControlName="numMascotas" value="Sí"
                     class="mr-2 leading-tight">
-                  <label for="mascotasSi" class="text-gray-700">Sí</label>
+                  <label for="mascotasSi" class="text-gray-700 text-xs">Sí</label>
                 </div>
                 <div>
                   <input type="radio" id="mascotasNo" formControlName="numMascotas" value="No"
                     class="mr-2 leading-tight">
-                  <label for="mascotasNo" class="text-gray-700">No</label>
+                  <label for="mascotasNo" class="text-gray-700 text-xs">No</label>
                 </div>
               </div>
               <div *ngIf="form.get('numMascotas')?.invalid && form.get('numMascotas')?.touched"
-                class="text-red-500 text-sm mt-2">
+                class="text-red-500 text-sm mt-2 text-xs">
                 <div *ngIf="form.get('numMascotas')?.errors?.['required']">Debes seleccionar si tienes mascotas.</div>
               </div>
             </div>
             <div>
-              <label for="espaciosFavoritos" class="block text-gray-700 text-sm font-bold mb-2">
+              <label for="espaciosFavoritos" class="block text-gray-700 text-sm font-bold mb-2 text-xs">
                 ESPACIOS FAVORITOS
               </label>
               <input id="espaciosFavoritos" formControlName="espaciosFavoritos" name="espaciosFavoritos" type="text"
                 placeholder="Espacios favoritos"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               <div *ngIf="form.get('espaciosFavoritos')?.invalid && form.get('espaciosFavoritos')?.touched"
-                class="text-red-500 text-sm mt-2">
+                class="text-red-500 text-sm mt-2 text-xs">
                 <div *ngIf="form.get('espaciosFavoritos')?.errors?.['required']">Espacios favoritos es requerido.</div>
               </div>
             </div>
           </div>
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label for="modeloAutomovil" class="block text-gray-700 text-sm font-bold mb-2">
+              <label for="modeloAutomovil" class="block text-gray-700 text-sm font-bold mb-2 text-xs">
                 AUTOMÓVIL
               </label>
               <input id="modeloAutomovil" formControlName="modeloAutomovil" name="modeloAutomovil" type="text"
                 placeholder="Modelo de automóvil"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               <div *ngIf="form.get('modeloAutomovil')?.invalid && form.get('modeloAutomovil')?.touched"
-                class="text-red-500 text-sm mt-2">
+                class="text-red-500 text-sm mt-2 text-xs">
                 <div *ngIf="form.get('modeloAutomovil')?.errors?.['required']">Modelo de automóvil es requerido.</div>
               </div>
             </div>
             <div>
-              <label for="referenciaVivienda" class="block text-gray-700 text-sm font-bold mb-2">
+              <label for="referenciaVivienda" class="block text-gray-700 text-sm font-bold mb-2 text-xs">
                 REFERENCIA DE VIVIENDA
               </label>
               <input id="referenciaVivienda" formControlName="referenciaVivienda" name="referenciaVivienda" type="text"
                 placeholder="Nombre de un proyecto favorito"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               <div *ngIf="form.get('referenciaVivienda')?.invalid && form.get('referenciaVivienda')?.touched"
-                class="text-red-500 text-sm mt-2">
+                class="text-red-500 text-sm mt-2 text-xs">
                 <div *ngIf="form.get('referenciaVivienda')?.errors?.['required']">Referencia de vivienda es requerido.
                 </div>
               </div>
@@ -321,4 +321,4 @@
       <button class="text-white" (click)="closeMessage()">✕</button>
     </div>
   </div>
-</div>|
+</div>
