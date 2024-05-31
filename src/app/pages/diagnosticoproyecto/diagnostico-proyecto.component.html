@@ -3,17 +3,20 @@
     <h1 class="text-xl font-bold text-gray-700 mb-2">DIAGNÓSTICO DEL PROYECTO</h1>
     <div class="my-4">
       <p *ngIf="currentStep === 1" class="text-gray-600 mb-2">Comprendemos tus necesidades, y estamos para asesorarte mejor.</p>
-
       <p *ngIf="currentStep === 2" class="text-gray-600 mb-2">Ahora sí! iniciemos con el diagnóstico</p>
-
       <p *ngIf="currentStep === 3" class="text-gray-600 mb-2">Ahora conozcamos un poco más sobre tu vivienda</p>
 
       <div class="w-3/4 mx-auto text-center relative">
         <div class="flex items-center justify-between mb-2 relative z-10">
           <div *ngFor="let step of steps; let i = index" class="relative z-10">
-            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-white border-2"
-              [class.border-lime-500]="i < completedSteps" [class.border-gray-300]="i >= completedSteps">
-              <span [class.text-lime-500]="i < completedSteps" [class.text-gray-400]="i >= completedSteps">✔️</span>
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-full border-2"
+              [ngClass]="{
+                'bg-lime-500 border-lime-500': i < completedSteps,
+                'bg-white border-gray-300': i >= completedSteps
+              }"
+            >
+              <span [class.text-white]="i < completedSteps" [class.text-gray-400]="i >= completedSteps">✔️</span>
             </div>
           </div>
         </div>
@@ -120,27 +123,6 @@
               </div>
             </div>
           </div>
-
-          <!--<div class="mb-4">
-            <label for="country" class="block text-gray-700 text-sm font-bold mb-2">
-              6 → PAÍS
-            </label>
-            <div class="relative">
-              <select id="country" formControlName="country" name="country" autocomplete="off"
-                class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
-                <option value="">Seleccione un país</option>
-                <option *ngFor="let pais of paises" [value]="pais">{{ pais }}</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path d="M7 10l5 5 5-5H7z" />
-                </svg>
-              </div>
-              <div *ngIf="country?.invalid && (country?.dirty || country?.touched)" class="text-red-500 text-sm mt-2">
-                <div *ngIf="country?.errors?.['required']">Debes seleccionar un País.</div>
-              </div>
-            </div>
-          </div>-->
         </ng-container>
 
       <!--<ng-container *ngIf="currentStep === 1 && currentQuestion === 3">
@@ -150,7 +132,7 @@
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 1">
           <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2">
-              1 → PRIMER NIVEL (PUEDE ELEGIR UNA O MÁS OPCIONES)
+              1 → PRIMER NIVEL
             </label>
             <div [formArrayName]="'primerNivel'">
               <div *ngFor="let nivel of primerNivel; let i = index">
@@ -165,7 +147,7 @@
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 2">
           <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2">
-              2 → SEGUNDO NIVEL (PUEDE ELEGIR UNA O MÁS OPCIONES)
+              2 → SEGUNDO NIVEL
             </label>
             <div [formArrayName]="'segundoNivel'">
               <div *ngFor="let nivel of segundoNivel; let i = index">
@@ -186,7 +168,7 @@
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 3">
           <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2">
-              3 → SEGUNDO NIVEL + TERRAZA (PUEDE ELEGIR UNA O MÁS OPCIONES)
+              3 → TERCER NIVEL
             </label>
             <div [formArrayName]="'segundoNivelMasTerraza'">
               <div *ngFor="let nivel of segundoNivelMasTerraza; let i = index">
@@ -323,7 +305,7 @@
     </div>
   </div>
 
-  <div *ngIf="showMessage" class="fixed bottom-4 right-4 bg-yellow-500 text-white p-4 rounded-lg shadow-lg z-50">
+  <div *ngIf="showMessage" class="fixed bottom-4 right-4 bg-lime-500 text-white p-4 rounded-lg shadow-lg z-50">
     <div class="flex items-center justify-between">
       <span class="text-lg font-bold mr-2">{{ message }}</span>
       <button class="text-white" (click)="closeMessage()">✕</button>
