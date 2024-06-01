@@ -5,7 +5,7 @@ import { AgradecimientoComponent } from './pages/agradecimiento/agradecimiento.c
 
 const routes: Routes = [
   {path: 'diagnostico', component: DiagnosticoProyectoComponent},
-  {path: 'diagnostico', component: AgradecimientoComponent},
+  {path: 'agradecimiento', component: AgradecimientoComponent},
   { path: '**', redirectTo: 'diagnostico', pathMatch: 'full'}
 ];
 

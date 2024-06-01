@@ -315,10 +315,10 @@
     </div>
   </div>
 
-  <div *ngIf="showMessage" class="fixed bottom-4 right-4 bg-lime-500 text-white p-4 rounded-lg shadow-lg z-50">
+  <div *ngIf="showMessage" class="fixed bottom-4 right-4 bg-lime-500 text-white p-2 rounded-md shadow-md z-50 text-sm">
     <div class="flex items-center justify-between">
-      <span class="text-lg font-bold mr-2">{{ message }}</span>
-      <button class="text-white" (click)="closeMessage()">✕</button>
+      <span class="font-semibold mr-2">{{ message }}</span>
+      <button class="text-white text-sm" (click)="closeMessage()">✕</button>
     </div>
   </div>
 </div>

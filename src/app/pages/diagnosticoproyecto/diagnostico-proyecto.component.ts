@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-diagnostico-proyecto',
@@ -40,7 +41,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
   showMessage = false;
   message = '';
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -243,9 +244,10 @@ export class DiagnosticoProyectoComponent implements OnInit {
         this.form.get('referenciaVivienda')!.markAsTouched();
       } else {
         this.showMessage = true;
-        this.message = 'Finalizamos.\n\nAhora sí descarga tu pdf';
+        this.message = 'Finalizamos.';
         setTimeout(() => {
           this.showMessage = false;
+          this.router.navigate(['/agradecimiento']); // Redirigir a la página de agradecimiento
           this.resetForm(); // Resetear el formulario al estado inicial
         }, 2000);
       }
