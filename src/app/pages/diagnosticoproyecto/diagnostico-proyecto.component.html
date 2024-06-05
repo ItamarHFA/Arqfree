@@ -10,13 +10,10 @@
       <div class="w-1/2 mx-auto text-center relative">
         <div class="flex items-center justify-between mb-2 relative z-10" style="margin-top: 2rem;">
           <div *ngFor="let step of steps; let i = index" class="relative z-10">
-            <div
-              class="flex items-center justify-center w-10 h-10 rounded-full border-2"
-              [ngClass]="{
+            <div class="flex items-center justify-center w-10 h-10 rounded-full border-2" [ngClass]="{
                 'bg-lime-500 border-lime-500': i < completedSteps,
                 'bg-white border-gray-300': i >= completedSteps
-              }"
-            >
+              }">
               <span [class.text-white]="i < completedSteps" [class.text-gray-400]="i >= completedSteps">✔️</span>
             </div>
           </div>
@@ -126,7 +123,7 @@
           </div>
         </ng-container>
 
-      <!--<ng-container *ngIf="currentStep === 1 && currentQuestion === 3">
+        <!--<ng-container *ngIf="currentStep === 1 && currentQuestion === 3">
           
         </ng-container>-->
         <!-- Questions for Step 2 -->
@@ -147,7 +144,8 @@
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
             <div *ngIf="form.get('primerNivel')?.touched && form.get('primerNivel')?.errors?.['required']"
-              class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar al menos una opción o completar la casilla de otros..</div>
+              class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar al menos una opción o completar la casilla de
+              otros..</div>
           </div>
         </ng-container>
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 2">
@@ -167,7 +165,8 @@
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
             <div *ngIf="form.get('segundoNivel')?.touched && form.get('segundoNivel')?.errors?.['required']"
-              class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar al menos una opción o completar la casilla de otros.
+              class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar al menos una opción o completar la casilla de
+              otros.
             </div>
           </div>
         </ng-container>
@@ -189,7 +188,8 @@
             </div>
             <div
               *ngIf="form.get('segundoNivelMasTerraza')?.touched && form.get('segundoNivelMasTerraza')?.errors?.['required']"
-              class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar al menos una opción o completar la casilla de otros..</div>
+              class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar al menos una opción o completar la casilla de
+              otros..</div>
           </div>
         </ng-container>
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 4">
@@ -316,9 +316,11 @@
     </div>
   </div>
 
-  <div *ngIf="showMessage" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-lime-500 text-white p-4 rounded-md shadow-md z-50 text-lg">
-    <div class="flex items-center justify-between">
-      <span class="font-semibold mr-2">{{ message }}</span>
+  <div *ngIf="showMessage"
+    class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-lime-500 text-white p-4 rounded-md shadow-md z-50 text-lg text-center">
+    <div class="flex flex-col items-center">
+      <span class="font-semibold text-2xl">✔</span>
+      <span class="mt-2">{{ message }}</span>
     </div>
-  </div>   
+  </div>
 </div>
