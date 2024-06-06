@@ -32,7 +32,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
   ];*/
   countryCodes = ['+54', '+591', '+55', '+56', '+57', '+593', '+592', '+595', '+51', '+597', '+598', '+58', '+49', '+34', '+33', '+39', '+44', '+351', '+7', '+31', '+32', '+41', '+234', '+27', '+20', '+213', '+251', '+233', '+254', '+256', '+244', '+258', '+1', '+52'];
   
-  primerNivel = ['COCHERA', 'ESTUDIO', 'BAÑO DE VISITA', 'SALA', 'COCINA / DISPENSADOR / ISLA', 'COMEDOR', 'DORMITORIO', 'TERRAZA / TERRAZA', 'PISCINA'];
+  primerNivel = ['COCHERA', 'ESTUDIO', 'BAÑO DE VISITA', 'SALA', 'COCINA / DISPENSADOR / ISLA', 'COMEDOR', 'DORMITORIO', 'TERRAZA / JARDIN', 'PISCINA'];
   segundoNivel = ['WALKING CLOSET + BAÑO', 'DORMITORIO PRINCIPAL', 'DORMITORIOS SECUNDARIOS', 'SERVICIOS HIGIENICOS', 'ZONA DE STAR', 'BIBLIOTECA'];
   segundoNivelMasTerraza = ['ZONA DE SERVICIO', 'ZONA SOCIAL / PARRILLA', 'LAVANDERIA', 'GYMNSAIO', 'JACUZZI'];
   estilosFachada = ['INTROSPECTIVA', 'MODERNA', 'POSMODERNA'];
@@ -126,16 +126,6 @@ export class DiagnosticoProyectoComponent implements OnInit {
   get segundoNivelMasTerrazaControls() {
     return (this.form.get('segundoNivelMasTerraza') as FormArray).controls;
   }
-
-  /*minSelectedCheckboxes(min: number) {
-    return (formArray: AbstractControl) => {
-      const totalSelected = (formArray as FormArray).controls
-        .map(control => control.value)
-        .reduce((prev, next) => next ? prev + 1 : prev, 0);
-        const otrosValue = this.form?.get('otros')?.value;
-      return totalSelected >= min || (otrosValue && otrosValue.trim() !== '') ? null : { required: true };
-    };
-  }*/
 
   minSelectedCheckboxesOrOtros(min: number) {
     return (formArray: AbstractControl) => {
