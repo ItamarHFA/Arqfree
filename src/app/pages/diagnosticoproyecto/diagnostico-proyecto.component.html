@@ -59,8 +59,8 @@
                 placeholder="Tu número"
                 class="shadow appearance-none border-t border-r border-b rounded-r w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
-            <div *ngIf="phoneNumber?.invalid && (phoneNumber?.dirty || phoneNumber?.touched)"
-              class="text-red-500 text-sm mt-2">
+            <div *ngIf="phoneNumber?.invalid && (phoneNumber?.dirty || phoneNumber?.touched)" class="text-red-500 text-sm mt-2">
+              <div *ngIf="phoneNumber?.errors?.['required']">Número de celular es requerido.</div>
               <div *ngIf="phoneNumber?.errors?.['pattern']">Solo permite números.</div>
             </div>
           </div>
@@ -70,9 +70,11 @@
             <label for="email" class="block text-gray-700 text-sm font-bold mb-2">
               3 → CORREO
             </label>
-            <input id="email" formControlName="email" name="email" type="email" placeholder="Tu correo"
-              autocomplete="email"
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <input id="email" formControlName="email" name="email" type="email" placeholder="Tu correo" autocomplete="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-red-500 text-sm mt-2">
+              <div *ngIf="email?.errors?.['required']">Correo electrónico es requerido.</div>
+              <div *ngIf="email?.errors?.['email']">Correo electrónico no es válido.</div>
+            </div>
           </div>
         </ng-container>
 
@@ -235,6 +237,8 @@
               <div *ngIf="form.get('coloresFavoritos')?.invalid && form.get('coloresFavoritos')?.touched"
                 class="text-red-500 text-sm mt-2 text-xs">
                 <div *ngIf="form.get('coloresFavoritos')?.errors?.['required']">Colores favoritos es requerido.</div>
+                
+                <div *ngIf="form.get('espaciosFavoritos')?.errors?.['pattern']">Solo permite letras.</div>
               </div>
             </div>
           </div>
@@ -270,6 +274,7 @@
               <div *ngIf="form.get('espaciosFavoritos')?.invalid && form.get('espaciosFavoritos')?.touched"
                 class="text-red-500 text-sm mt-2 text-xs">
                 <div *ngIf="form.get('espaciosFavoritos')?.errors?.['required']">Espacios favoritos es requerido.</div>
+                <div *ngIf="form.get('espaciosFavoritos')?.errors?.['pattern']">Solo permite letras.</div>
               </div>
             </div>
           </div>
@@ -284,6 +289,7 @@
               <div *ngIf="form.get('modeloAutomovil')?.invalid && form.get('modeloAutomovil')?.touched"
                 class="text-red-500 text-sm mt-2 text-xs">
                 <div *ngIf="form.get('modeloAutomovil')?.errors?.['required']">Modelo de automóvil es requerido.</div>
+                <div *ngIf="form.get('modeloAutomovil')?.errors?.['pattern']">Solo permite letras.</div>
               </div>
             </div>
             <div>
@@ -295,8 +301,8 @@
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               <div *ngIf="form.get('referenciaVivienda')?.invalid && form.get('referenciaVivienda')?.touched"
                 class="text-red-500 text-sm mt-2 text-xs">
-                <div *ngIf="form.get('referenciaVivienda')?.errors?.['required']">Referencia de vivienda es requerido.
-                </div>
+                <div *ngIf="form.get('referenciaVivienda')?.errors?.['required']">Referencia de vivienda es requerido.  </div>
+                <div *ngIf="form.get('referenciaVivienda')?.errors?.['pattern']">Solo permite letras.</div>
               </div>
             </div>
           </div>

@@ -52,8 +52,8 @@ export class DiagnosticoProyectoComponent implements OnInit {
       //country: ['', Validators.required],
       address: [''],
       countryCode: ['+54'],
-      phoneNumber: ['', [Validators.pattern('^[0-9]+$')]],
-      email: ['', Validators.email],
+      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      email: ['', [Validators.required, Validators.email]],
       primerNivel: this.fb.array(this.primerNivel.map(() => this.fb.control(false)), this.minSelectedCheckboxesOrOtros(1)),
       segundoNivel: this.fb.array(this.segundoNivel.map(() => this.fb.control(false)), this.minSelectedCheckboxesOrOtros(1)),
       segundoNivelMasTerraza: this.fb.array(this.segundoNivelMasTerraza.map(() => this.fb.control(false)), this.minSelectedCheckboxesOrOtros(1)),
@@ -61,10 +61,10 @@ export class DiagnosticoProyectoComponent implements OnInit {
       estiloFachada: ['', Validators.required],
       numIntegrantes: ['', [Validators.required, Validators.min(0)]],
       numMascotas: ['', Validators.required],
-      modeloAutomovil: ['', Validators.required],
-      coloresFavoritos: ['', Validators.required],
-      espaciosFavoritos: ['', Validators.required],
-      referenciaVivienda: ['', Validators.required]
+      modeloAutomovil: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
+      coloresFavoritos: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
+      espaciosFavoritos: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
+      referenciaVivienda: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]]
     });
 
     /*this.form.get('country')!.valueChanges.subscribe(value => {
@@ -169,6 +169,10 @@ export class DiagnosticoProyectoComponent implements OnInit {
       // Validaciones para el paso 1
       if (this.currentQuestion === 1 && this.name?.invalid) {
         this.name.markAsTouched();
+      } else if (this.currentQuestion === 1 && this.phoneNumber?.invalid) {
+        this.phoneNumber.markAsTouched();
+      } else if (this.currentQuestion === 1 && this.email?.invalid) {
+        this.email.markAsTouched();
       } else if (this.currentQuestion === 2 && this.projectType?.invalid) {
         this.projectType.markAsTouched();
       } else if (this.currentQuestion === 2 && this.area?.invalid) {
