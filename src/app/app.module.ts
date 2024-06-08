@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DiagnosticoProyectoComponent } from './pages/diagnosticoproyecto/diagnostico-proyecto.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AgradecimientoComponent } from './pages/agradecimiento/agradecimiento.component';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,6 +19,7 @@ import { AgradecimientoComponent } from './pages/agradecimiento/agradecimiento.c
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     ReactiveFormsModule
   ],
   providers: [],

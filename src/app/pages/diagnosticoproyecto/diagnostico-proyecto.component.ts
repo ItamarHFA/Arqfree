@@ -1,6 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { EstiloFachada } from 'src/app/modelo/estilo-fachada';
+import { Piso } from 'src/app/modelo/piso';
+import { PrimerNivel } from 'src/app/modelo/primer-nivel';
+import { Proyecto } from 'src/app/modelo/proyecto';
+import { SegundoNivel } from 'src/app/modelo/segundo-nivel';
+import { TercerNivel } from 'src/app/modelo/tercer-nivel';
+import { TipoProyecto } from 'src/app/modelo/tipo-proyecto';
+import { EstiloFachadaService } from 'src/app/servicio/estilo-fachada.service';
+import { PisoService } from 'src/app/servicio/piso.service';
+import { PrimerNivelService } from 'src/app/servicio/primer-nivel.service';
+import { SegundoNivelService } from 'src/app/servicio/segundo-nivel.service';
+import { TercerNivelService } from 'src/app/servicio/tercer-nivel.service';
+import { TipoProyectoService } from 'src/app/servicio/tipo-proyecto.service';
 
 @Component({
   selector: 'app-diagnostico-proyecto',
@@ -17,31 +30,42 @@ export class DiagnosticoProyectoComponent implements OnInit {
   totalQuestionsStep2 = 4;
   totalQuestionsStep3 = 5;
 
-  proyectos = ['Unifamiliar', 'Multifamiliar', 'Comercial'];
+  proyectos: Proyecto[] = [];
+  pisos: Piso[] = [];
+  primerNivel: PrimerNivel[] = [];
+  segundoNivel: SegundoNivel[] = [];
+  segundoNivelMasTerraza: TercerNivel[] = [];
+  estilosFachada: EstiloFachada[] = [];
+  tiposProyecto: TipoProyecto[] = [];
+
+  /*proyectos = ['Unifamiliar', 'Multifamiliar', 'Comercial'];
   pisos: { [key: string]: string[] } = {
     Unifamiliar: ['1 nivel', '2 niveles', 'Otros'],
     Multifamiliar: ['1 nivel', '2 niveles', '3 niveles a más'],
     Comercial: ['1 nivel', '2 niveles', '3 niveles a más']
   };
-  filteredPisos: string[] = [];
+  primerNivel = ['COCHERA', 'ESTUDIO', 'BAÑO DE VISITA', 'SALA', 'COCINA / DISPENSADOR / ISLA', 'COMEDOR', 'DORMITORIO', 'TERRAZA / JARDIN', 'PISCINA'];
+  segundoNivel = ['WALKING CLOSET + BAÑO', 'DORMITORIO PRINCIPAL', 'DORMITORIOS SECUNDARIOS', 'SERVICIOS HIGIENICOS', 'ZONA DE STAR', 'BIBLIOTECA'];
+  segundoNivelMasTerraza = ['ZONA DE SERVICIO', 'ZONA SOCIAL / PARRILLA', 'LAVANDERIA', 'GYMNSAIO', 'JACUZZI'];
+  estilosFachada = ['INTROSPECTIVA', 'MODERNA', 'POSMODERNA'];
   /*paises = [
     'Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 'Ecuador', 'Guyana', 'Paraguay', 'Perú', 'Surinam', 'Uruguay', 'Venezuela',
     'Alemania', 'España', 'Francia', 'Italia', 'Reino Unido', 'Portugal', 'Rusia', 'Países Bajos', 'Bélgica', 'Suiza',
     'Nigeria', 'Sudáfrica', 'Egipto', 'Argelia', 'Etiopía', 'Ghana', 'Kenia', 'Uganda', 'Angola', 'Mozambique',
     'Estados Unidos', 'Canadá', 'México'
   ];*/
+  filteredPisos: Piso[] = [];
   countryCodes = ['+54', '+591', '+55', '+56', '+57', '+593', '+592', '+595', '+51', '+597', '+598', '+58', '+49', '+34', '+33', '+39', '+44', '+351', '+7', '+31', '+32', '+41', '+234', '+27', '+20', '+213', '+251', '+233', '+254', '+256', '+244', '+258', '+1', '+52'];
-  
-  primerNivel = ['COCHERA', 'ESTUDIO', 'BAÑO DE VISITA', 'SALA', 'COCINA / DISPENSADOR / ISLA', 'COMEDOR', 'DORMITORIO', 'TERRAZA / JARDIN', 'PISCINA'];
-  segundoNivel = ['WALKING CLOSET + BAÑO', 'DORMITORIO PRINCIPAL', 'DORMITORIOS SECUNDARIOS', 'SERVICIOS HIGIENICOS', 'ZONA DE STAR', 'BIBLIOTECA'];
-  segundoNivelMasTerraza = ['ZONA DE SERVICIO', 'ZONA SOCIAL / PARRILLA', 'LAVANDERIA', 'GYMNSAIO', 'JACUZZI'];
-  estilosFachada = ['INTROSPECTIVA', 'MODERNA', 'POSMODERNA'];
-  
   form!: FormGroup;
   showMessage = false;
   message = '';
 
-  constructor(private fb: FormBuilder, private router: Router) { }
+  constructor(private fb: FormBuilder, private router: Router, private estiloFachadaService: EstiloFachadaService,
+    private pisoService: PisoService,
+    private primerNivelService: PrimerNivelService,
+    private segundoNivelService: SegundoNivelService,
+    private tercerNivelService: TercerNivelService,
+    private tipoProyectoService: TipoProyectoService) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -54,9 +78,9 @@ export class DiagnosticoProyectoComponent implements OnInit {
       countryCode: ['+54'],
       phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       email: ['', [Validators.required, Validators.email]],
-      primerNivel: this.fb.array(this.primerNivel.map(() => this.fb.control(false)), this.minSelectedCheckboxesOrOtros(1)),
-      segundoNivel: this.fb.array(this.segundoNivel.map(() => this.fb.control(false)), this.minSelectedCheckboxesOrOtros(1)),
-      segundoNivelMasTerraza: this.fb.array(this.segundoNivelMasTerraza.map(() => this.fb.control(false)), this.minSelectedCheckboxesOrOtros(1)),
+      primerNivel: this.fb.array([], this.minSelectedCheckboxesOrOtros(1)),
+      segundoNivel: this.fb.array([], this.minSelectedCheckboxesOrOtros(1)),
+      segundoNivelMasTerraza: this.fb.array([], this.minSelectedCheckboxesOrOtros(1)),
       otros: [''],
       estiloFachada: ['', Validators.required],
       numIntegrantes: ['', [Validators.required, Validators.min(0)]],
@@ -65,6 +89,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
       coloresFavoritos: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
       espaciosFavoritos: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
       referenciaVivienda: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]]
+      
     });
 
     /*this.form.get('country')!.valueChanges.subscribe(value => {
@@ -79,8 +104,33 @@ export class DiagnosticoProyectoComponent implements OnInit {
     this.form.get('otros')!.valueChanges.subscribe(() => {
       this.form.get('segundoNivel')!.updateValueAndValidity();
     });
+    this.loadData();
 
     this.updateProgressBar();
+  }
+
+  loadData() {
+    this.estiloFachadaService.listar().subscribe(data => {
+      this.estilosFachada = data;
+    });
+    this.pisoService.listar().subscribe(data => {
+      this.pisos = data; // Aquí se asegura que pisos es un arreglo de objetos Piso
+    });
+    this.primerNivelService.listar().subscribe(data => {
+      this.primerNivel = data;
+      this.form.setControl('primerNivel', this.fb.array(this.primerNivel.map(() => this.fb.control(false))));
+    });
+    this.segundoNivelService.listar().subscribe(data => {
+      this.segundoNivel = data;
+      this.form.setControl('segundoNivel', this.fb.array(this.segundoNivel.map(() => this.fb.control(false))));
+    });
+    this.tercerNivelService.listar().subscribe(data => {
+      this.segundoNivelMasTerraza = data;
+      this.form.setControl('segundoNivelMasTerraza', this.fb.array(this.segundoNivelMasTerraza.map(() => this.fb.control(false))));
+    });
+    this.tipoProyectoService.listar().subscribe(data => {
+      this.tiposProyecto = data;
+    });
   }
 
   get name() {
@@ -132,14 +182,24 @@ export class DiagnosticoProyectoComponent implements OnInit {
       const totalSelected = (formArray as FormArray).controls
         .map(control => control.value)
         .reduce((prev, next) => next ? prev + 1 : prev, 0);
-      const otrosValue = this.form?.get('otros')?.value;
+      const otrosValue = this.form?.get('otrosPrimerNivel')?.value || this.form?.get('otrosSegundoNivel')?.value || this.form?.get('otrosTercerNivel')?.value;
       return totalSelected >= min || (otrosValue && otrosValue.trim() !== '') ? null : { required: true };
     };
   }
 
-  onProjectTypeChange() {
-    const selectedProjectType = this.form.get('projectType')!.value;
-    this.filteredPisos = this.pisos[selectedProjectType];
+  onProjectTypeChange(): void {
+    const selectedProjectTypeId = this.form.get('projectType')!.value;
+    const tipoProyecto = this.tiposProyecto.find(tp => tp.id === selectedProjectTypeId);
+
+    if (tipoProyecto) {
+      if (tipoProyecto.descripcion === 'Unifamiliar') {
+        this.filteredPisos = this.pisos.filter(p => p.descripcion === '1 nivel' || p.descripcion === '2 niveles' || p.descripcion === 'otros');
+      } else if (tipoProyecto.descripcion === 'Multifamiliar' || tipoProyecto.descripcion === 'Comercial') {
+        this.filteredPisos = this.pisos.filter(p => p.descripcion === '1 nivel' || p.descripcion === '2 niveles' || p.descripcion === '3 niveles a más');
+      }
+    } else {
+      this.filteredPisos = [];
+    }
   }
 
   updateProgressBar() {

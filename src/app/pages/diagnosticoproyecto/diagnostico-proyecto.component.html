@@ -85,14 +85,12 @@
               4 → TIPO DE PROYECTO
             </label>
             <div>
-              <div *ngFor="let proyecto of proyectos">
-                <input type="radio" id="{{proyecto}}" formControlName="projectType" [value]="proyecto"
-                  class="mr-2 leading-tight" (change)="onProjectTypeChange()">
-                <label for="{{proyecto}}" class="text-gray-700">{{ proyecto }}</label>
+              <div *ngFor="let tipo of tiposProyecto">
+                <input type="radio" id="{{tipo.id}}" formControlName="projectType" [value]="tipo.id" class="mr-2 leading-tight" (change)="onProjectTypeChange()">
+                <label for="{{tipo.id}}" class="text-gray-700">{{ tipo.descripcion }}</label>
               </div>
-              <div *ngIf="projectType?.invalid && (projectType?.dirty || projectType?.touched)"
-                class="text-red-500 text-sm mt-2">
-                <div *ngIf="projectType?.errors?.['required']">Debes seleccionar un tipo de proyecto.</div>
+              <div *ngIf="projectType?.invalid && (projectType?.dirty || projectType?.touched)" class="text-red-500 text-sm mt-2">
+                Debes seleccionar un tipo de proyecto.
               </div>
             </div>
           </div>
@@ -115,19 +113,16 @@
             </label>
             <div>
               <div *ngFor="let piso of filteredPisos">
-                <input type="radio" id="{{piso}}" formControlName="floor" [value]="piso" class="mr-2 leading-tight">
-                <label for="{{piso}}" class="text-gray-700">{{ piso }}</label>
+                <input type="radio" id="{{piso.id}}" formControlName="floor" [value]="piso.id" class="mr-2 leading-tight">
+                <label for="{{piso.id}}" class="text-gray-700">{{ piso.descripcion }}</label>
               </div>
-              <div *ngIf="floor?.invalid && (floor?.dirty || floor?.touched)" class="text-red-500 text-sm mt-2">
-                <div *ngIf="floor?.errors?.['required']">Debes seleccionar Piso.</div>
+              <div *ngIf="form.get('floor')?.touched && form.get('floor')?.errors?.['required']" class="text-red-500 text-sm mt-2 text-xs">
+                Debes seleccionar Piso.
               </div>
             </div>
           </div>
         </ng-container>
 
-        <!--<ng-container *ngIf="currentStep === 1 && currentQuestion === 3">
-          
-        </ng-container>-->
         <!-- Questions for Step 2 -->
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 1">
           <div class="mb-4">
@@ -310,7 +305,6 @@
 
         <!-- Botones de navegación -->
         <div class="flex items-center justify-between">
-
           <button *ngIf="currentQuestion > 1 || currentStep > 1"
             class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-4"
             type="button" (click)="onBack()">REGRESAR</button>
