@@ -37,23 +37,6 @@ export class DiagnosticoProyectoComponent implements OnInit {
   segundoNivelMasTerraza: TercerNivel[] = [];
   estilosFachada: EstiloFachada[] = [];
   tiposProyecto: TipoProyecto[] = [];
-
-  /*proyectos = ['Unifamiliar', 'Multifamiliar', 'Comercial'];
-  pisos: { [key: string]: string[] } = {
-    Unifamiliar: ['1 nivel', '2 niveles', 'Otros'],
-    Multifamiliar: ['1 nivel', '2 niveles', '3 niveles a más'],
-    Comercial: ['1 nivel', '2 niveles', '3 niveles a más']
-  };
-  primerNivel = ['COCHERA', 'ESTUDIO', 'BAÑO DE VISITA', 'SALA', 'COCINA / DISPENSADOR / ISLA', 'COMEDOR', 'DORMITORIO', 'TERRAZA / JARDIN', 'PISCINA'];
-  segundoNivel = ['WALKING CLOSET + BAÑO', 'DORMITORIO PRINCIPAL', 'DORMITORIOS SECUNDARIOS', 'SERVICIOS HIGIENICOS', 'ZONA DE STAR', 'BIBLIOTECA'];
-  segundoNivelMasTerraza = ['ZONA DE SERVICIO', 'ZONA SOCIAL / PARRILLA', 'LAVANDERIA', 'GYMNSAIO', 'JACUZZI'];
-  estilosFachada = ['INTROSPECTIVA', 'MODERNA', 'POSMODERNA'];
-  /*paises = [
-    'Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 'Ecuador', 'Guyana', 'Paraguay', 'Perú', 'Surinam', 'Uruguay', 'Venezuela',
-    'Alemania', 'España', 'Francia', 'Italia', 'Reino Unido', 'Portugal', 'Rusia', 'Países Bajos', 'Bélgica', 'Suiza',
-    'Nigeria', 'Sudáfrica', 'Egipto', 'Argelia', 'Etiopía', 'Ghana', 'Kenia', 'Uganda', 'Angola', 'Mozambique',
-    'Estados Unidos', 'Canadá', 'México'
-  ];*/
   filteredPisos: Piso[] = [];
   countryCodes = ['+54', '+591', '+55', '+56', '+57', '+593', '+592', '+595', '+51', '+597', '+598', '+58', '+49', '+34', '+33', '+39', '+44', '+351', '+7', '+31', '+32', '+41', '+234', '+27', '+20', '+213', '+251', '+233', '+254', '+256', '+244', '+258', '+1', '+52'];
   form!: FormGroup;
@@ -73,15 +56,16 @@ export class DiagnosticoProyectoComponent implements OnInit {
       projectType: ['', Validators.required],
       area: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9 ]+$')]],
       floor: ['', Validators.required],
-      //country: ['', Validators.required],
       address: [''],
       countryCode: ['+54'],
       phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       email: ['', [Validators.required, Validators.email]],
-      primerNivel: this.fb.array([], this.minSelectedCheckboxesOrOtros(1)),
-      segundoNivel: this.fb.array([], this.minSelectedCheckboxesOrOtros(1)),
-      segundoNivelMasTerraza: this.fb.array([], this.minSelectedCheckboxesOrOtros(1)),
+      primerNivel: this.fb.array([], this.minSelectedCheckboxesOrOtros(1, 'otros')),
+      segundoNivel: this.fb.array([], this.minSelectedCheckboxesOrOtros(1, 'otrosSegundoNivel')),
+      segundoNivelMasTerraza: this.fb.array([], this.minSelectedCheckboxesOrOtros(1, 'otrosTercerNivel')),
       otros: [''],
+      otrosSegundoNivel: [''],
+      otrosTercerNivel: [''],
       estiloFachada: ['', Validators.required],
       numIntegrantes: ['', [Validators.required, Validators.min(0)]],
       numMascotas: ['', Validators.required],
@@ -89,23 +73,22 @@ export class DiagnosticoProyectoComponent implements OnInit {
       coloresFavoritos: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
       espaciosFavoritos: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
       referenciaVivienda: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]]
-      
     });
 
-    /*this.form.get('country')!.valueChanges.subscribe(value => {
-      if (value === 'Perú') {
-        this.form.get('address')!.setValidators([Validators.required, Validators.pattern('^[A-Za-z ]+$')]);
-      } else {
-        this.form.get('address')!.clearValidators();
-      }
-      this.form.get('address')!.updateValueAndValidity();
-    });*/
-
+    // Observers for 'otros' fields to trigger validation updates
     this.form.get('otros')!.valueChanges.subscribe(() => {
+      this.form.get('primerNivel')!.updateValueAndValidity();
+    });
+
+    this.form.get('otrosSegundoNivel')!.valueChanges.subscribe(() => {
       this.form.get('segundoNivel')!.updateValueAndValidity();
     });
-    this.loadData();
 
+    this.form.get('otrosTercerNivel')!.valueChanges.subscribe(() => {
+      this.form.get('segundoNivelMasTerraza')!.updateValueAndValidity();
+    });
+
+    this.loadData();
     this.updateProgressBar();
   }
 
@@ -114,19 +97,22 @@ export class DiagnosticoProyectoComponent implements OnInit {
       this.estilosFachada = data;
     });
     this.pisoService.listar().subscribe(data => {
-      this.pisos = data; // Aquí se asegura que pisos es un arreglo de objetos Piso
+      this.pisos = data;
     });
     this.primerNivelService.listar().subscribe(data => {
       this.primerNivel = data;
-      this.form.setControl('primerNivel', this.fb.array(this.primerNivel.map(() => this.fb.control(false))));
+      const primerNivelArray = this.primerNivel.map(() => this.fb.control(false));
+      this.form.setControl('primerNivel', this.fb.array(primerNivelArray, this.minSelectedCheckboxesOrOtros(1, 'otros')));
     });
     this.segundoNivelService.listar().subscribe(data => {
       this.segundoNivel = data;
-      this.form.setControl('segundoNivel', this.fb.array(this.segundoNivel.map(() => this.fb.control(false))));
+      const segundoNivelArray = this.segundoNivel.map(() => this.fb.control(false));
+      this.form.setControl('segundoNivel', this.fb.array(segundoNivelArray, this.minSelectedCheckboxesOrOtros(1, 'otrosSegundoNivel')));
     });
     this.tercerNivelService.listar().subscribe(data => {
       this.segundoNivelMasTerraza = data;
-      this.form.setControl('segundoNivelMasTerraza', this.fb.array(this.segundoNivelMasTerraza.map(() => this.fb.control(false))));
+      const segundoNivelMasTerrazaArray = this.segundoNivelMasTerraza.map(() => this.fb.control(false));
+      this.form.setControl('segundoNivelMasTerraza', this.fb.array(segundoNivelMasTerrazaArray, this.minSelectedCheckboxesOrOtros(1, 'otrosTercerNivel')));
     });
     this.tipoProyectoService.listar().subscribe(data => {
       this.tiposProyecto = data;
@@ -148,10 +134,6 @@ export class DiagnosticoProyectoComponent implements OnInit {
   get floor() {
     return this.form.get('floor');
   }
-
-  /*get country() {
-    return this.form.get('country');
-  }*/
 
   get address() {
     return this.form.get('address');
@@ -177,12 +159,13 @@ export class DiagnosticoProyectoComponent implements OnInit {
     return (this.form.get('segundoNivelMasTerraza') as FormArray).controls;
   }
 
-  minSelectedCheckboxesOrOtros(min: number) {
+  minSelectedCheckboxesOrOtros(min: number, otrosControlName: string) {
     return (formArray: AbstractControl) => {
       const totalSelected = (formArray as FormArray).controls
         .map(control => control.value)
         .reduce((prev, next) => next ? prev + 1 : prev, 0);
-      const otrosValue = this.form?.get('otrosPrimerNivel')?.value || this.form?.get('otrosSegundoNivel')?.value || this.form?.get('otrosTercerNivel')?.value;
+      const otrosValue = this.form?.get(otrosControlName)?.value;
+      console.log(`totalSelected: ${totalSelected}, otrosValue: ${otrosValue}`); // Debug
       return totalSelected >= min || (otrosValue && otrosValue.trim() !== '') ? null : { required: true };
     };
   }
@@ -193,7 +176,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
 
     if (tipoProyecto) {
       if (tipoProyecto.descripcion === 'Unifamiliar') {
-        this.filteredPisos = this.pisos.filter(p => p.descripcion === '1 nivel' || p.descripcion === '2 niveles' || p.descripcion === 'otros');
+        this.filteredPisos = this.pisos.filter(p => p.descripcion === '1 nivel' || p.descripcion === '2 niveles' || p.descripcion === 'Otros');
       } else if (tipoProyecto.descripcion === 'Multifamiliar' || tipoProyecto.descripcion === 'Comercial') {
         this.filteredPisos = this.pisos.filter(p => p.descripcion === '1 nivel' || p.descripcion === '2 niveles' || p.descripcion === '3 niveles a más');
       }
@@ -237,12 +220,9 @@ export class DiagnosticoProyectoComponent implements OnInit {
         this.projectType.markAsTouched();
       } else if (this.currentQuestion === 2 && this.area?.invalid) {
         this.area.markAllAsTouched();
-      } /*else if (this.currentQuestion === 2 && this.country?.invalid) {
-        this.country.markAsTouched();
-      }*/ else if (this.currentQuestion === 2 && this.floor?.invalid) {
+      } else if (this.currentQuestion === 2 && this.floor?.invalid) {
         this.floor.markAsTouched();
-      }  else {
-        // Avanzar pregunta
+      } else {
         if (this.currentQuestion < this.totalQuestionsStep1) {
           this.currentQuestion++;
         } else if (this.currentQuestion === this.totalQuestionsStep1) {
@@ -260,15 +240,16 @@ export class DiagnosticoProyectoComponent implements OnInit {
       // Validaciones para el paso 2
       if (this.currentQuestion === 1 && this.form.get('primerNivel')!.invalid) {
         this.form.get('primerNivel')!.markAllAsTouched();
+        this.form.get('otros')!.markAsTouched();
       } else if (this.currentQuestion === 2 && this.form.get('segundoNivel')!.invalid) {
         this.form.get('segundoNivel')!.markAllAsTouched();
-        this.form.get('otros')!.markAsTouched();
+        this.form.get('otrosSegundoNivel')!.markAsTouched();
       } else if (this.currentQuestion === 3 && this.form.get('segundoNivelMasTerraza')!.invalid) {
         this.form.get('segundoNivelMasTerraza')!.markAllAsTouched();
+        this.form.get('otrosTercerNivel')!.markAsTouched();
       } else if (this.currentQuestion === 4 && this.form.get('estiloFachada')!.invalid) {
         this.form.get('estiloFachada')!.markAsTouched();
       } else {
-        // Avanzar pregunta
         if (this.currentQuestion < this.totalQuestionsStep2) {
           this.currentQuestion++;
         } else if (this.currentQuestion === this.totalQuestionsStep2) {
@@ -283,7 +264,6 @@ export class DiagnosticoProyectoComponent implements OnInit {
         }
       }
     } else if (this.currentStep === 3) {
-      // Validar todas las preguntas del paso 3
       if (this.form.get('numIntegrantes')!.invalid) {
         this.form.get('numIntegrantes')!.markAsTouched();
       } else if (this.form.get('numMascotas')!.invalid) {
@@ -306,7 +286,6 @@ export class DiagnosticoProyectoComponent implements OnInit {
         }, 2000);
       }
     }
-
     this.updateProgressBar();
   }
 

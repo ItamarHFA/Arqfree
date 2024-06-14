@@ -132,7 +132,7 @@
             <div [formArrayName]="'primerNivel'">
               <div *ngFor="let nivel of primerNivel; let i = index">
                 <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
-                <label for="{{nivel}}" class="text-gray-700 text-xs">{{ nivel }}</label>
+                <label for="primerNivel_{{i}}" class="text-gray-700 text-xs">{{ nivel.descripcion }}</label>
               </div>
             </div>
             <div class="mt-4">
@@ -142,7 +142,7 @@
             </div>
             <div *ngIf="form.get('primerNivel')?.touched && form.get('primerNivel')?.errors?.['required']"
               class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar al menos una opción o completar la casilla de
-              otros..</div>
+              otros.</div>
           </div>
         </ng-container>
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 2">
@@ -153,18 +153,17 @@
             <div [formArrayName]="'segundoNivel'">
               <div *ngFor="let nivel of segundoNivel; let i = index">
                 <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
-                <label for="{{nivel}}" class="text-gray-700 text-xs">{{ nivel }}</label>
+                <label for="segundoNivel_{{i}}" class="text-gray-700 text-xs">{{ nivel.descripcion }}</label>
               </div>
             </div>
             <div class="mt-4">
-              <label for="otros" class="block text-gray-700 text-sm font-bold mb-2 text-xs">Otros:</label>
-              <input id="otros" formControlName="otros" type="text" placeholder="Especifique otros"
+              <label for="otrosSegundoNivel" class="block text-gray-700 text-sm font-bold mb-2 text-xs">Otros:</label>
+              <input id="otrosSegundoNivel" formControlName="otrosSegundoNivel" type="text" placeholder="Especifique otros"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
             <div *ngIf="form.get('segundoNivel')?.touched && form.get('segundoNivel')?.errors?.['required']"
               class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar al menos una opción o completar la casilla de
-              otros.
-            </div>
+              otros.</div>
           </div>
         </ng-container>
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 3">
@@ -175,18 +174,18 @@
             <div [formArrayName]="'segundoNivelMasTerraza'">
               <div *ngFor="let nivel of segundoNivelMasTerraza; let i = index">
                 <input type="checkbox" [formControlName]="i" class="mr-2 leading-tight">
-                <label for="{{nivel}}" class="text-gray-700 text-xs">{{ nivel }}</label>
+                <label for="segundoNivelMasTerraza_{{i}}" class="text-gray-700 text-xs">{{ nivel.descripcion }}</label>
               </div>
             </div>
             <div class="mt-4">
-              <label for="otros" class="block text-gray-700 text-sm font-bold mb-2 text-xs">Otros:</label>
-              <input id="otros" formControlName="otros" type="text" placeholder="Especifique otros"
+              <label for="otrosTercerNivel" class="block text-gray-700 text-sm font-bold mb-2 text-xs">Otros:</label>
+              <input id="otrosTercerNivel" formControlName="otrosTercerNivel" type="text" placeholder="Especifique otros"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
             <div
               *ngIf="form.get('segundoNivelMasTerraza')?.touched && form.get('segundoNivelMasTerraza')?.errors?.['required']"
               class="text-red-500 text-sm mt-2 text-xs">Debes seleccionar al menos una opción o completar la casilla de
-              otros..</div>
+              otros.</div>
           </div>
         </ng-container>
         <ng-container *ngIf="currentStep === 2 && currentQuestion === 4">
@@ -196,9 +195,9 @@
             </label>
             <div>
               <div *ngFor="let estilo of estilosFachada">
-                <input type="radio" id="{{estilo}}" formControlName="estiloFachada" [value]="estilo"
+                <input type="radio" id="{{estilo.id}}" formControlName="estiloFachada" [value]="estilo.id"
                   class="mr-2 leading-tight">
-                <label for="{{estilo}}" class="text-gray-700 text-xs">{{ estilo }}</label>
+                <label for="{{estilo.id}}" class="text-gray-700 text-xs">{{ estilo.descripcion }}</label>
               </div>
             </div>
             <div *ngIf="form.get('estiloFachada')?.touched && form.get('estiloFachada')?.errors?.['required']"
@@ -233,7 +232,7 @@
                 class="text-red-500 text-sm mt-2 text-xs">
                 <div *ngIf="form.get('coloresFavoritos')?.errors?.['required']">Colores favoritos es requerido.</div>
                 
-                <div *ngIf="form.get('espaciosFavoritos')?.errors?.['pattern']">Solo permite letras.</div>
+                <div *ngIf="form.get('coloresFavoritos')?.errors?.['pattern']">Solo permite letras.</div>
               </div>
             </div>
           </div>
