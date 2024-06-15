@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AgradecimientoComponent {
 
+  descargarEbook() {
+    const link = document.createElement('a');
+    link.href = 'assets/Ebook.pdf';  // Cambia el path según donde se almacene el archivo
+    link.download = 'Ebook.pdf';
+    link.click();
+  }
 }
