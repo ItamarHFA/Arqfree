@@ -27,7 +27,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
   steps = [1, 2, 3];
   completedSteps = 0;
   totalQuestionsStep1 = 2;
-  totalQuestionsStep2 = 4;
+  totalQuestionsStep2 = 1; // Updated to 1 for each level in step 2
   totalQuestionsStep3 = 5;
 
   proyectos: Proyecto[] = [];
@@ -42,6 +42,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
   form!: FormGroup;
   showMessage = false;
   message = '';
+  selectedFloor: '1 nivel' | '2 niveles' | '3 niveles a más' | '' = '';
 
   constructor(private fb: FormBuilder, private router: Router, private estiloFachadaService: EstiloFachadaService,
     private pisoService: PisoService,
@@ -120,52 +121,47 @@ export class DiagnosticoProyectoComponent implements OnInit {
   }
 
   get name() {
-    return this.form.get('name');
+    return this.form?.get('name');
   }
-
+  
   get projectType() {
-    return this.form.get('projectType');
+    return this.form?.get('projectType');
   }
-
+  
   get area() {
-    return this.form.get('area');
+    return this.form?.get('area');
   }
-
+  
   get floor() {
-    return this.form.get('floor');
+    return this.form?.get('floor');
   }
-
-  get address() {
-    return this.form.get('address');
-  }
-
+  
   get phoneNumber() {
-    return this.form.get('phoneNumber');
+    return this.form?.get('phoneNumber');
   }
-
+  
   get email() {
-    return this.form.get('email');
+    return this.form?.get('email');
   }
-
+  
   get primerNivelControls() {
-    return (this.form.get('primerNivel') as FormArray).controls;
+    return (this.form?.get('primerNivel') as FormArray)?.controls || [];
   }
-
+  
   get segundoNivelControls() {
-    return (this.form.get('segundoNivel') as FormArray).controls;
+    return (this.form?.get('segundoNivel') as FormArray)?.controls || [];
   }
-
+  
   get segundoNivelMasTerrazaControls() {
-    return (this.form.get('segundoNivelMasTerraza') as FormArray).controls;
+    return (this.form?.get('segundoNivelMasTerraza') as FormArray)?.controls || [];
   }
-
+  
   minSelectedCheckboxesOrOtros(min: number, otrosControlName: string) {
     return (formArray: AbstractControl) => {
       const totalSelected = (formArray as FormArray).controls
         .map(control => control.value)
         .reduce((prev, next) => next ? prev + 1 : prev, 0);
       const otrosValue = this.form?.get(otrosControlName)?.value;
-      console.log(`totalSelected: ${totalSelected}, otrosValue: ${otrosValue}`); // Debug
       return totalSelected >= min || (otrosValue && otrosValue.trim() !== '') ? null : { required: true };
     };
   }
@@ -185,43 +181,60 @@ export class DiagnosticoProyectoComponent implements OnInit {
     }
   }
 
+  onFloorChange() {
+    const selectedFloorValue = this.form.get('floor')!.value;
+    const piso = this.pisos.find(p => p.id === selectedFloorValue);
+
+    if (piso) {
+      this.selectedFloor = piso.descripcion as '1 nivel' | '2 niveles' | '3 niveles a más';
+    } else {
+      this.selectedFloor = '';
+    }
+    this.updateProgressBar();
+  }
+
   updateProgressBar() {
+    const stepsForFloor: Record<'1 nivel' | '2 niveles' | '3 niveles a más', number> = {
+      '1 nivel': 2,
+      '2 niveles': 3,
+      '3 niveles a más': 4
+    };
+
     let totalQuestions = 0;
+
     if (this.currentStep === 1) {
       totalQuestions = this.totalQuestionsStep1;
     } else if (this.currentStep === 2) {
-      totalQuestions = this.totalQuestionsStep2;
+      totalQuestions = this.selectedFloor ? stepsForFloor[this.selectedFloor] : 0;
+    } else if (this.currentStep === 3) {
+      totalQuestions = this.totalQuestionsStep3;
     }
 
-    const totalProgressSteps = this.steps.length - 1;
-    const stepProgress = (this.currentQuestion / totalQuestions) * (100 / totalProgressSteps);
+    const progressPerStep = 100 / (this.steps.length - 1);
+    const stepProgress = (this.currentQuestion / totalQuestions) * progressPerStep;
 
     if (this.currentStep === 1) {
       this.progressBarWidth = `${stepProgress}%`;
     } else if (this.currentStep === 2) {
-      this.progressBarWidth = `${(100 / totalProgressSteps) + stepProgress}%`;
+      this.progressBarWidth = `${progressPerStep + stepProgress}%`;
     } else if (this.currentStep === 3) {
       this.progressBarWidth = `100%`;
     }
 
-    this.completedSteps = Math.floor(parseFloat(this.progressBarWidth) / (100 / totalProgressSteps)) + 1;
+    this.completedSteps = Math.floor(parseFloat(this.progressBarWidth) / progressPerStep);
   }
 
   onContinue() {
     if (this.currentStep === 1) {
       // Validaciones para el paso 1
-      if (this.currentQuestion === 1 && this.name?.invalid) {
-        this.name.markAsTouched();
-      } else if (this.currentQuestion === 1 && this.phoneNumber?.invalid) {
-        this.phoneNumber.markAsTouched();
-      } else if (this.currentQuestion === 1 && this.email?.invalid) {
-        this.email.markAsTouched();
-      } else if (this.currentQuestion === 2 && this.projectType?.invalid) {
-        this.projectType.markAsTouched();
-      } else if (this.currentQuestion === 2 && this.area?.invalid) {
-        this.area.markAllAsTouched();
-      } else if (this.currentQuestion === 2 && this.floor?.invalid) {
-        this.floor.markAsTouched();
+      if (this.currentQuestion === 1 && (this.name?.invalid || this.phoneNumber?.invalid || this.email?.invalid)) {
+        this.name?.markAsTouched();
+        this.phoneNumber?.markAsTouched();
+        this.email?.markAsTouched();
+      } else if (this.currentQuestion === 2 && (this.projectType?.invalid || this.area?.invalid || this.floor?.invalid)) {
+        this.projectType?.markAsTouched();
+        this.area?.markAllAsTouched();
+        this.floor?.markAsTouched();
       } else {
         if (this.currentQuestion < this.totalQuestionsStep1) {
           this.currentQuestion++;
@@ -238,21 +251,36 @@ export class DiagnosticoProyectoComponent implements OnInit {
       }
     } else if (this.currentStep === 2) {
       // Validaciones para el paso 2
-      if (this.currentQuestion === 1 && this.form.get('primerNivel')!.invalid) {
-        this.form.get('primerNivel')!.markAllAsTouched();
-        this.form.get('otros')!.markAsTouched();
-      } else if (this.currentQuestion === 2 && this.form.get('segundoNivel')!.invalid) {
-        this.form.get('segundoNivel')!.markAllAsTouched();
-        this.form.get('otrosSegundoNivel')!.markAsTouched();
-      } else if (this.currentQuestion === 3 && this.form.get('segundoNivelMasTerraza')!.invalid) {
-        this.form.get('segundoNivelMasTerraza')!.markAllAsTouched();
-        this.form.get('otrosTercerNivel')!.markAsTouched();
-      } else if (this.currentQuestion === 4 && this.form.get('estiloFachada')!.invalid) {
-        this.form.get('estiloFachada')!.markAsTouched();
+      if (this.selectedFloor === '1 nivel' && this.currentQuestion === 1 && this.form?.get('primerNivel')?.invalid) {
+        this.form?.get('primerNivel')?.markAllAsTouched();
+        this.form?.get('otros')?.markAsTouched();
+      } else if (this.selectedFloor === '2 niveles' && this.currentQuestion === 1 && this.form?.get('primerNivel')?.invalid) {
+        this.form?.get('primerNivel')?.markAllAsTouched();
+        this.form?.get('otros')?.markAsTouched();
+      } else if (this.selectedFloor === '2 niveles' && this.currentQuestion === 2 && this.form?.get('segundoNivel')?.invalid) {
+        this.form?.get('segundoNivel')?.markAllAsTouched();
+        this.form?.get('otrosSegundoNivel')?.markAsTouched();
+      } else if (this.selectedFloor === '3 niveles a más' && this.currentQuestion === 1 && this.form?.get('primerNivel')?.invalid) {
+        this.form?.get('primerNivel')?.markAllAsTouched();
+        this.form?.get('otros')?.markAsTouched();
+      } else if (this.selectedFloor === '3 niveles a más' && this.currentQuestion === 2 && this.form?.get('segundoNivel')?.invalid) {
+        this.form?.get('segundoNivel')?.markAllAsTouched();
+        this.form?.get('otrosSegundoNivel')?.markAsTouched();
+      } else if (this.selectedFloor === '3 niveles a más' && this.currentQuestion === 3 && this.form?.get('segundoNivelMasTerraza')?.invalid) {
+        this.form?.get('segundoNivelMasTerraza')?.markAllAsTouched();
+        this.form?.get('otrosTercerNivel')?.markAsTouched();
+      } else if ((this.selectedFloor === '1 nivel' && this.currentQuestion === 2 && this.form?.get('estiloFachada')?.invalid) || 
+                 (this.selectedFloor === '2 niveles' && this.currentQuestion === 3 && this.form?.get('estiloFachada')?.invalid) ||
+                 (this.selectedFloor === '3 niveles a más' && this.currentQuestion === 4 && this.form?.get('estiloFachada')?.invalid)) {
+        this.form?.get('estiloFachada')?.markAsTouched();
       } else {
-        if (this.currentQuestion < this.totalQuestionsStep2) {
+        if (this.selectedFloor === '1 nivel' && this.currentQuestion < 2) {
           this.currentQuestion++;
-        } else if (this.currentQuestion === this.totalQuestionsStep2) {
+        } else if (this.selectedFloor === '2 niveles' && this.currentQuestion < 3) {
+          this.currentQuestion++;
+        } else if (this.selectedFloor === '3 niveles a más' && this.currentQuestion < 4) {
+          this.currentQuestion++;
+        } else {
           this.showMessage = true;
           this.message = 'Continuemos';
           setTimeout(() => {
@@ -264,18 +292,18 @@ export class DiagnosticoProyectoComponent implements OnInit {
         }
       }
     } else if (this.currentStep === 3) {
-      if (this.form.get('numIntegrantes')!.invalid) {
-        this.form.get('numIntegrantes')!.markAsTouched();
-      } else if (this.form.get('numMascotas')!.invalid) {
-        this.form.get('numMascotas')!.markAsTouched();
-      } else if (this.form.get('modeloAutomovil')!.invalid) {
-        this.form.get('modeloAutomovil')!.markAsTouched();
-      } else if (this.form.get('coloresFavoritos')!.invalid) {
-        this.form.get('coloresFavoritos')!.markAsTouched();
-      } else if (this.form.get('espaciosFavoritos')!.invalid) {
-        this.form.get('espaciosFavoritos')!.markAsTouched();
-      } else if (this.form.get('referenciaVivienda')!.invalid) {
-        this.form.get('referenciaVivienda')!.markAsTouched();
+      if (this.form?.get('numIntegrantes')?.invalid) {
+        this.form?.get('numIntegrantes')?.markAsTouched();
+      } else if (this.form?.get('numMascotas')?.invalid) {
+        this.form?.get('numMascotas')?.markAsTouched();
+      } else if (this.form?.get('modeloAutomovil')?.invalid) {
+        this.form?.get('modeloAutomovil')?.markAsTouched();
+      } else if (this.form?.get('coloresFavoritos')?.invalid) {
+        this.form?.get('coloresFavoritos')?.markAsTouched();
+      } else if (this.form?.get('espaciosFavoritos')?.invalid) {
+        this.form?.get('espaciosFavoritos')?.markAsTouched();
+      } else if (this.form?.get('referenciaVivienda')?.invalid) {
+        this.form?.get('referenciaVivienda')?.markAsTouched();
       } else {
         this.showMessage = true;
         this.message = 'Finalizamos.';
@@ -288,7 +316,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
     }
     this.updateProgressBar();
   }
-
+  
   onBack() {
     if (this.currentStep === 2 && this.currentQuestion === 1) {
       this.currentStep = 1;
@@ -313,6 +341,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
     this.currentStep = 1;
     this.currentQuestion = 1;
     this.progressBarWidth = '0%';
+    this.selectedFloor = '';
     this.updateProgressBar();
   }
 }
