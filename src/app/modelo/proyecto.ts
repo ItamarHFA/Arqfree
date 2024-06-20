@@ -6,7 +6,7 @@ import { TercerNivel } from "./tercer-nivel";
 import { TipoProyecto } from "./tipo-proyecto";
 
 export class Proyecto {
-    id!: number;
+    id?: number;
     nombreCliente!: string;
     numeroCelular!: string;
     correo!: string;
@@ -24,7 +24,7 @@ export class Proyecto {
     otrosSegundoNivel?: string;
     otrosTercerNivel?: string;
     primerNivel!: PrimerNivel[];
-    segundoNivel!: SegundoNivel[];
-    tercerNivel!: TercerNivel[];
-    fechaCreacion!: string;
+    segundoNivel?: SegundoNivel[];
+    tercerNivel?: TercerNivel[];
+    fechaCreacion?: string;
 }

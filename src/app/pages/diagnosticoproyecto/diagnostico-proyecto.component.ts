@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import { EstiloFachada } from 'src/app/modelo/estilo-fachada';
 import { Piso } from 'src/app/modelo/piso';
 import { PrimerNivel } from 'src/app/modelo/primer-nivel';
@@ -14,6 +15,7 @@ import { PrimerNivelService } from 'src/app/servicio/primer-nivel.service';
 import { SegundoNivelService } from 'src/app/servicio/segundo-nivel.service';
 import { TercerNivelService } from 'src/app/servicio/tercer-nivel.service';
 import { TipoProyectoService } from 'src/app/servicio/tipo-proyecto.service';
+import { ProyectoService } from 'src/app/servicio/proyecto.service';
 
 @Component({
   selector: 'app-diagnostico-proyecto',
@@ -30,7 +32,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
   totalQuestionsStep2 = 1; // Updated to 1 for each level in step 2
   totalQuestionsStep3 = 5;
 
-  proyectos: Proyecto[] = [];
+  proyecto: Proyecto[] = [];
   pisos: Piso[] = [];
   primerNivel: PrimerNivel[] = [];
   segundoNivel: SegundoNivel[] = [];
@@ -44,12 +46,18 @@ export class DiagnosticoProyectoComponent implements OnInit {
   message = '';
   selectedFloor: '1 nivel' | '2 niveles' | '3 niveles a más' | '' = '';
 
-  constructor(private fb: FormBuilder, private router: Router, private estiloFachadaService: EstiloFachadaService,
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private estiloFachadaService: EstiloFachadaService,
     private pisoService: PisoService,
     private primerNivelService: PrimerNivelService,
     private segundoNivelService: SegundoNivelService,
     private tercerNivelService: TercerNivelService,
-    private tipoProyectoService: TipoProyectoService) { }
+    private tipoProyectoService: TipoProyectoService,
+    private proyectoService: ProyectoService,
+    private datePipe: DatePipe
+  ) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -225,8 +233,8 @@ export class DiagnosticoProyectoComponent implements OnInit {
   }
 
   onContinue() {
+    // Validaciones para el paso 1
     if (this.currentStep === 1) {
-      // Validaciones para el paso 1
       if (this.currentQuestion === 1 && (this.name?.invalid || this.phoneNumber?.invalid || this.email?.invalid)) {
         this.name?.markAsTouched();
         this.phoneNumber?.markAsTouched();
@@ -292,6 +300,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
         }
       }
     } else if (this.currentStep === 3) {
+      // Validaciones para el paso 3
       if (this.form?.get('numIntegrantes')?.invalid) {
         this.form?.get('numIntegrantes')?.markAsTouched();
       } else if (this.form?.get('numMascotas')?.invalid) {
@@ -305,18 +314,12 @@ export class DiagnosticoProyectoComponent implements OnInit {
       } else if (this.form?.get('referenciaVivienda')?.invalid) {
         this.form?.get('referenciaVivienda')?.markAsTouched();
       } else {
-        this.showMessage = true;
-        this.message = 'Finalizamos.';
-        setTimeout(() => {
-          this.showMessage = false;
-          this.router.navigate(['/agradecimiento']); // Redirigir a la página de agradecimiento
-          this.resetForm(); // Resetear el formulario al estado inicial
-        }, 2000);
+        this.saveProject(); // Guardar el proyecto
       }
     }
     this.updateProgressBar();
   }
-  
+
   onBack() {
     if (this.currentStep === 2 && this.currentQuestion === 1) {
       this.currentStep = 1;
@@ -329,6 +332,77 @@ export class DiagnosticoProyectoComponent implements OnInit {
     }
     this.updateProgressBar();
   }
+
+  saveProject() {
+    const proyecto: Proyecto = this.createProyectoFromForm();
+    console.log('Proyecto a enviar:', proyecto); // Añadir este log para ver el objeto antes de enviarlo
+    this.proyectoService.registrar(proyecto).subscribe(
+      response => {
+        console.log('Proyecto guardado exitosamente', response);
+        //this.showMessage = true;
+       // this.message = 'Proyecto guardado exitosamente';
+        setTimeout(() => {
+          this.showMessage = false;
+          this.router.navigate(['/agradecimiento']); // Redirigir a la página de agradecimiento
+          this.resetForm(); // Resetear el formulario al estado inicial
+        }, 2000);
+      },
+      error => {
+        console.error('Error al guardar el proyecto', error);
+        this.showMessage = true;
+        this.message = `Error al guardar el proyecto: ${error.message}`;
+        setTimeout(() => {
+          this.showMessage = false;
+        }, 4000);
+      }
+    );
+  }
+
+  createProyectoFromForm(): Proyecto {
+    const primerNivelSeleccionados = this.form.value.primerNivel
+      .map((checked: boolean, i: number) => checked ? this.primerNivel[i] : null)
+      .filter((v: any) => v !== null)
+      .map((nivel: PrimerNivel) => ({ id: nivel.id }));
+  
+    const segundoNivelSeleccionados = this.form.value.segundoNivel
+      .map((checked: boolean, i: number) => checked ? this.segundoNivel[i] : null)
+      .filter((v: any) => v !== null)
+      .map((nivel: SegundoNivel) => ({ id: nivel.id }));
+  
+    const tercerNivelSeleccionados = this.form.value.segundoNivelMasTerraza
+      .map((checked: boolean, i: number) => checked ? this.segundoNivelMasTerraza[i] : null)
+      .filter((v: any) => v !== null)
+      .map((nivel: TercerNivel) => ({ id: nivel.id }));
+  
+    const tipoProyectoSeleccionado = this.tiposProyecto.find(tp => tp.id === this.form.value.projectType);
+    const pisoSeleccionado = this.pisos.find(p => p.id === this.form.value.floor);
+    const estiloFachadaSeleccionado = this.estilosFachada.find(ef => ef.id === this.form.value.estiloFachada);
+  
+    return {
+      id: undefined, // Deja el id como opcional
+      nombreCliente: this.form.value.name,
+      numeroCelular: this.form.value.phoneNumber,
+      correo: this.form.value.email,
+      tipoProyecto: { id: tipoProyectoSeleccionado!.id } as TipoProyecto,
+      area: this.form.value.area,
+      piso: { id: pisoSeleccionado!.id } as Piso,
+      estiloFachada: { id: estiloFachadaSeleccionado!.id } as EstiloFachada,
+      numeroIntegrantes: this.form.value.numIntegrantes,
+      coloresFavoritos: this.form.value.coloresFavoritos,
+      mascota: this.form.value.numMascotas,
+      espacioFavorito: this.form.value.espaciosFavoritos,
+      automovil: this.form.value.modeloAutomovil,
+      referenciaVivienda: this.form.value.referenciaVivienda,
+      otrosPrimerNivel: this.form.value.otros,
+      otrosSegundoNivel: this.form.value.otrosSegundoNivel,
+      otrosTercerNivel: this.form.value.otrosTercerNivel,
+      primerNivel: primerNivelSeleccionados,
+      segundoNivel: segundoNivelSeleccionados.length ? segundoNivelSeleccionados : undefined,
+      tercerNivel: tercerNivelSeleccionados.length ? tercerNivelSeleccionados : undefined,
+     
+    };
+  }
+  
 
   closeMessage() {
     this.showMessage = false;

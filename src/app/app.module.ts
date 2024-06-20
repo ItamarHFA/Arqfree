@@ -9,6 +9,7 @@ import { DiagnosticoProyectoComponent } from './pages/diagnosticoproyecto/diagno
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AgradecimientoComponent } from './pages/agradecimiento/agradecimiento.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
