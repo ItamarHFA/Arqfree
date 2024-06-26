@@ -61,7 +61,7 @@ export class DiagnosticoProyectoComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      name: ['', [Validators.required, Validators.pattern('^[A-Za-z]+$')]],
+      name: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
       projectType: ['', Validators.required],
       area: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9 ]+$')]],
       floor: ['', Validators.required],
